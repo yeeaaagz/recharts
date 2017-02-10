@@ -39,6 +39,7 @@ class CartesianAxis extends Component {
     ]),
     axisLine: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
     tickLine: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+    mirror: PropTypes.bool,
 
     minTickGap: PropTypes.number,
     ticks: PropTypes.array,
@@ -66,6 +67,7 @@ class CartesianAxis extends Component {
     tickLine: true,
     axisLine: true,
     tick: true,
+    mirror: false,
 
     minTickGap: 5,
     // The width or height of tick
@@ -223,34 +225,35 @@ class CartesianAxis extends Component {
    *  (x2, y2): The coordinate of endpoint close to axis
    */
   getTickLineCoord(data) {
-    const { x, y, width, height, orientation, tickSize } = this.props;
+    const { x, y, width, height, orientation, tickSize, mirror } = this.props;
     let x1, x2, y1, y2, tx, ty;
 
+    const sign = mirror ? -1 : 1;
     const finalTickSize = data.tickSize || tickSize;
     const tickCoord = isNumber(data.tickCoord) ? data.tickCoord : data.coordinate;
 
     switch (orientation) {
       case 'top':
         x1 = x2 = data.coordinate;
-        y1 = ty = y + height - finalTickSize;
+        y1 = ty = y + height - sign * finalTickSize;
         y2 = y + height;
         tx = tickCoord;
         break;
       case 'left':
         y1 = y2 = data.coordinate;
-        x1 = tx = x + width - finalTickSize;
+        x1 = tx = x + width - sign * finalTickSize;
         x2 = x + width;
         ty = tickCoord;
         break;
       case 'right':
         y1 = y2 = data.coordinate;
-        x1 = tx = x + finalTickSize;
+        x1 = tx = x + sign * finalTickSize;
         x2 = x;
         ty = tickCoord;
         break;
       default:
         x1 = x2 = data.coordinate;
-        y1 = ty = y + finalTickSize;
+        y1 = ty = y + sign * finalTickSize;
         y2 = y;
         tx = tickCoord;
         break;
@@ -260,15 +263,15 @@ class CartesianAxis extends Component {
   }
 
   getTickTextAnchor() {
-    const { orientation } = this.props;
+    const { orientation, mirror } = this.props;
     let textAnchor;
 
     switch (orientation) {
       case 'left':
-        textAnchor = 'end';
+        textAnchor = mirror ? 'start' : 'end';
         break;
       case 'right':
-        textAnchor = 'start';
+        textAnchor = mirror ? 'end' : 'start';
         break;
       default:
         textAnchor = 'middle';
@@ -279,7 +282,7 @@ class CartesianAxis extends Component {
   }
 
   getTickVerticalAnchor() {
-    const { orientation } = this.props;
+    const { orientation, mirror } = this.props;
     let verticalAnchor = 'end';
 
     switch (orientation) {
@@ -288,10 +291,10 @@ class CartesianAxis extends Component {
         verticalAnchor = 'middle';
         break;
       case 'top':
-        verticalAnchor = 'end';
+        verticalAnchor = mirror ? 'start' : 'end';
         break;
       default:
-        verticalAnchor = 'start';
+        verticalAnchor = mirror ? 'end' : 'start';
         break;
     }
 
