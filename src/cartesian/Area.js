@@ -49,9 +49,6 @@ class Area extends Component {
     dot: PropTypes.oneOfType([
       PropTypes.func, PropTypes.element, PropTypes.object, PropTypes.bool,
     ]),
-    label: PropTypes.oneOfType([
-      PropTypes.func, PropTypes.element, PropTypes.object, PropTypes.bool,
-    ]),
     // have curve configuration
     curve: PropTypes.bool,
     layout: PropTypes.oneOf(['horizontal', 'vertical']),
@@ -84,7 +81,6 @@ class Area extends Component {
     // points of area
     points: [],
     dot: false,
-    label: false,
     curve: true,
     activeDot: true,
 
@@ -260,55 +256,6 @@ class Area extends Component {
     return <Layer className="recharts-area-dots">{dots}</Layer>;
   }
 
-  renderLabelItem(option, props, value) {
-    let labelItem;
-
-    if (React.isValidElement(option)) {
-      labelItem = React.cloneElement(option, props);
-    } else if (_.isFunction(option)) {
-      labelItem = option(props);
-    } else {
-      labelItem = (
-        <Text
-          key={props.key}
-          {...props}
-          className="recharts-area-label"
-        >
-          {_.isArray(value) ? value[1] : value}
-        </Text>
-      );
-    }
-
-    return labelItem;
-  }
-
-  renderLabels() {
-    const { isAnimationActive } = this.props;
-
-    if (isAnimationActive && !this.state.isAnimationFinished) { return null; }
-
-    const { points, label } = this.props;
-    const areaProps = getPresentationAttributes(this.props);
-    const customLabelProps = getPresentationAttributes(label);
-
-    const labels = points.map((entry, i) => {
-      const labelProps = {
-        textAnchor: 'middle',
-        ...entry,
-        ...areaProps,
-        ...customLabelProps,
-        index: i,
-        key: `label-${i}`,
-        value: entry.value,
-        payload: entry.payload,
-      };
-
-      return this.renderLabelItem(label, labelProps, entry.value);
-    });
-
-    return <Layer className="recharts-area-labels">{labels}</Layer>;
-  }
-
   render() {
     const { dot, label, points, className, top, left, xAxis, yAxis, width,
       height, isAnimationActive } = this.props;
@@ -342,7 +289,6 @@ class Area extends Component {
           ) : null
         }
         {(dot || hasSinglePoint) && this.renderDots()}
-        {label && this.renderLabels()}
         {(!isAnimationActive || isAnimationFinished) &&
           LabelList.renderCallByParent(this.props, points)}
       </Layer>

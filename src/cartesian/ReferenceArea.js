@@ -24,10 +24,6 @@ class ReferenceArea extends Component {
       height: PropTypes.number,
     }),
 
-    label: PropTypes.oneOfType([
-      PropTypes.number, PropTypes.string, PropTypes.func, PropTypes.element,
-    ]),
-
     xAxis: PropTypes.object,
     yAxis: PropTypes.object,
 
@@ -100,32 +96,6 @@ class ReferenceArea extends Component {
     return null;
   }
 
-  renderLabel({ x, y, width, height }) {
-    const { label, stroke } = this.props;
-    const props = {
-      ...label,
-      stroke: 'none',
-      fill: stroke,
-      x: x + width / 2,
-      y: y + height / 2,
-      textAnchor: 'middle',
-    };
-
-    if (React.isValidElement(label)) {
-      return React.cloneElement(label, props);
-    } else if (_.isFunction(label)) {
-      return label(props);
-    } else if (isNumOrStr(label)) {
-      return (
-        <g className="recharts-reference-area-label">
-          <Text {...props}>{label}</Text>
-        </g>
-      );
-    }
-
-    return null;
-  }
-
   renderRect(option, props) {
     let rect;
 
@@ -161,7 +131,6 @@ class ReferenceArea extends Component {
     return (
       <Layer className="recharts-reference-area">
         {this.renderRect(shape, { ...getPresentationAttributes(this.props), ...rect })}
-        {this.renderLabel(rect)}
         {Label.renderCallByParent(this.props, rect)}
       </Layer>
     );
