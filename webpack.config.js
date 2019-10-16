@@ -14,19 +14,41 @@ const config = {
   },
 
   module: {
-    rules: [{
-      test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      include: [
-        path.resolve(__dirname, 'src'),
-      ],
-      use: {
-        loader: 'babel-loader',
-        query: {
-          plugins: ['lodash'],
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        include: [
+          path.resolve(__dirname, 'src'),
+        ],
+        use: {
+          loader: 'babel-loader',
+          query: {
+            plugins: ['lodash'],
+          },
+        }
+      },
+        {
+          test: /\.less$/,
+          use: [
+            'style-loader',
+            'css-loader',
+            {
+              loader: 'less-loader',
+              options: {
+                modifyVars: themeVars
+              }
+            }
+          ]
         },
-      }
-    }],
+        {
+          test: /\.css$/,
+          use: [
+            'style-loader',
+            'css-loader'
+          ]
+        }
+    ],
   },
 
   externals: {
