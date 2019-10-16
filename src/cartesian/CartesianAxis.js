@@ -66,7 +66,6 @@ class CartesianAxis extends Component {
     ticks: [],
 
     stroke: '#666',
-    // stroke: 'red',
     tickLine: true,
     axisLine: true,
     tick: true,

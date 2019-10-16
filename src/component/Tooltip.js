@@ -34,11 +34,13 @@ class Tooltip extends Component {
 
   static propTypes = {
     /**
-     * If set a React element, the option is the custom react element of rendering tooltip. If set a function, the function will be called to render tooltip content.
+     * If set a React element, the option is the custom react element of rendering tooltip. If set
+     * a function, the function will be called to render tooltip content.
      */
     content: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     /**
-     * The box of viewing area, which has the shape of {x: someVal, y: someVal, width: someVal, height: someVal}, usually calculated internally.
+     * The box of viewing area, which has the shape of {x: someVal, y: someVal, width: someVal,
+     * height: someVal}, usually calculated internally.
      */
     viewBox: PropTypes.shape({
       x: PropTypes.number,
@@ -47,7 +49,8 @@ class Tooltip extends Component {
       height: PropTypes.number,
     }),
     /**
-     * If set true, the tooltip is displayed. If set false, the tooltip is hidden, usually calculated internally.
+     * If set true, the tooltip is displayed. If set false, the tooltip is hidden, usually
+     * calculated internally.
      */
     active: PropTypes.bool,
     /**
@@ -55,7 +58,8 @@ class Tooltip extends Component {
      */
     separator: PropTypes.string,
     /**
-     * The formatter function of value in tooltip. If you return an array, the first entry will be the formatted "value", and the second entry will be the formatted "name".
+     * The formatter function of value in tooltip. If you return an array, the first entry will be
+     * the formatted "value", and the second entry will be the formatted "name".
      */
     formatter: PropTypes.func,
     /**
@@ -83,7 +87,9 @@ class Tooltip extends Component {
      */
     contentStyle: PropTypes.object,
     /**
-     * If set false, no cursor will be drawn when tooltip is active. If set a object, the option is the configuration of cursor. If set a React element, the option is the custom react element of drawing cursor.
+     * If set false, no cursor will be drawn when tooltip is active. If set a object, the option is
+     * the configuration of cursor. If set a React element, the option is the custom react element
+     * of drawing cursor.
      */
     cursor: PropTypes.oneOfType([
       PropTypes.bool,
@@ -121,11 +127,12 @@ class Tooltip extends Component {
       type: PropTypes.oneOf(TOOLTIP_TYPES)
     })),
     /**
-     * Placement of tooltip.
+     * Placement of tooltip in regards to cell item.
      */
     placement: PropTypes.oneOf([
       'center',
-      'right'
+      'top-left',
+      'top-right'
       ]),
     /**
      * Placement of tooltip.

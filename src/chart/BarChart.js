@@ -23,7 +23,8 @@ export default class BarChart extends generateCategoricalChart({
 
   static propTypes = {
     /**
-     * If any two categorical charts(LineChart, AreaChart, BarChart, ComposedChart) have the same syncId, these two charts can sync the position tooltip, and the startIndex, endIndex of Brush.
+     * If any two categorical charts(LineChart, AreaChart, BarChart, ComposedChart) have the same
+     * syncId, these two charts can sync the position tooltip, and the startIndex, endIndex of Brush.
      */
     syncId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /**
@@ -47,7 +48,8 @@ export default class BarChart extends generateCategoricalChart({
      */
     layout: PropTypes.oneOf(['horizontal', 'vertical']),
     /**
-     * The type of offset function used to generate the lower and upper values in the series array. The four types are built-in offsets in d3-shape.
+     * The type of offset function used to generate the lower and upper values in the series array.
+     * The four types are built-in offsets in d3-shape.
      */
     stackOffset: PropTypes.oneOf(['sign', 'expand', 'none', 'wiggle', 'silhouette']),
     /**
@@ -72,11 +74,13 @@ export default class BarChart extends generateCategoricalChart({
      */
     barGap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /**
-     * The width or height of each bar. If the barSize is not specified, the size of the bar will be calculated by the barCategoryGap, barGap and the quantity of bar groups.
+     * The width or height of each bar. If the barSize is not specified, the size of the bar will be
+     * calculated by the barCategoryGap, barGap and the quantity of bar groups.
      */
     barSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /**
-     * The maximum width of all the bars in a horizontal BarChart, or maximum height in a vertical BarChart.
+     * The maximum width of all the bars in a horizontal BarChart, or maximum height in a
+     * vertical BarChart.
      */
     maxBarSize: PropTypes.number,
     /**
@@ -123,7 +127,8 @@ export default class BarChart extends generateCategoricalChart({
      */
     onMouseUp: PropTypes.func,
     /**
-     * If false set, stacked items will be rendered left to right. If true set, stacked items will be rendered right to left. (Render direction affects SVG layering, not x position.)
+     * If false set, stacked items will be rendered left to right. If true set, stacked items will
+     * be rendered right to left. (Render direction affects SVG layering, not x position.)
      */
     reverseStackOrder: PropTypes.bool,
     /**

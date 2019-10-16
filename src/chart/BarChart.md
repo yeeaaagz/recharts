@@ -8,6 +8,7 @@ const YAxis = require('../cartesian/YAxis').default;
 const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../component/Legend').default;
 const Cell = require('../component/Cell').default;
+
 import {
   BackIcon,
   Button,
@@ -114,8 +115,6 @@ class Example extends React.Component {
             </TextGroup>
           }
           bodyContentProps={ { padding: '20px' } }
-
-
           />
       );
     }
@@ -125,8 +124,6 @@ class Example extends React.Component {
 
   render() {
     const cellWidth = this.state.cellWidth ? `${this.state.cellWidth}px` : '1px';
-
-    console.log('cellWidth', cellWidth);
 
     return (
         <BarChart
@@ -182,7 +179,6 @@ class Example extends React.Component {
                   console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
                 }
 
-                console.log('onClick', e, payload);
                 return payload;
               });
             }
@@ -228,15 +224,9 @@ class Example extends React.Component {
                     console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
                   }
 
-                  console.log('onMouseMove', e, payload);
                   return payload;
                 });
               }
-            }
-          }
-          onMouseLeave={
-            (e) => {
-              console.log('onMouseLeave', e);
             }
           }
         >
@@ -246,7 +236,6 @@ class Example extends React.Component {
               if (value === 0) {
                 return value;
               }
-
               return `${value / 1000}k`;
             }}
             tickLine={false}
@@ -276,12 +265,10 @@ class Example extends React.Component {
           <Bar dataKey="value">
             {
               data.map((entry, index) => {
-                console.log('cell info', entry, index);
                 return (
                   <Cell cursor="pointer" fill={ this.state.tooltipVisible && index !== this.state.activeTooltipIndex ? 'rgba(34, 165, 247, .5)' : ThemeManager.getVar('blue-1') } key={`cell-${index}`}/>
                 );
-              }
-              )
+              })
             }
           </Bar>
         </BarChart>
@@ -302,6 +289,7 @@ const YAxis = require('../cartesian/YAxis').default;
 const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../component/Legend').default;
 const Cell = require('../component/Cell').default;
+
 import {
   BackIcon,
   Tooltip as RTooltip,
@@ -318,6 +306,7 @@ import {
   Title,
   VerticalSeparator
 } from 'prism-reactjs';
+
 const data = [
   {
     "name": "Mar",
@@ -376,7 +365,7 @@ class Example extends React.Component {
       );
     }
 
-    return <div/>;
+    return <div />;
   }
 
   renderHeader() {
@@ -393,7 +382,7 @@ class Example extends React.Component {
       );
     }
 
-    return <div/>;
+    return <div />;
   }
 
   renderBody() {
@@ -421,7 +410,6 @@ class Example extends React.Component {
           data={data}
           onClick={
             (e) => {
-              console.log('onClick', e);
               this.setState({
                 pageView: 'details',
                 activePayload: e.activePayload
@@ -430,9 +418,7 @@ class Example extends React.Component {
           }
           onMouseMove={
             (e) => {
-
               this.setState((prevState) => {
-
                 let payload = {};
 
                 if (e && !isNull(e.activeTooltipIndex)) {
@@ -471,10 +457,8 @@ class Example extends React.Component {
 
                 if (activeX && prevX && activeX !== prevX) {
                   payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-                  console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
                 }
 
-                console.log('onMouseMove', e, payload);
                 return payload;
 
               });
@@ -482,14 +466,13 @@ class Example extends React.Component {
           }
           onMouseLeave={
             (e) => {
-              console.log('onMouseLeave', e);
               this.setState({
                 tooltipVisible: false
               });
             }
           }
         >
-          <XAxis dataKey="name"  tickLine={false} />
+          <XAxis dataKey="name" tickLine={false} />
           <YAxis
             tickFormatter={(value) => {
               if (value === 0) {
@@ -530,8 +513,6 @@ class Example extends React.Component {
           bodyContent={ this.renderBody() } />
       </ContainerLayout>
     );
-
-
   }
 }
 
@@ -548,7 +529,9 @@ const YAxis = require('../cartesian/YAxis').default;
 const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../component/Legend').default;
 const ThemeManager = require('prism-reactjs').ThemeManager;
+
 import { Tooltip as RTooltip } from 'prism-reactjs';
+
 const data = [
   {
     "name": "Mar",
@@ -603,9 +586,7 @@ class Example extends React.Component {
           data={data}
           onMouseMove={
             (e) => {
-
               this.setState((prevState) => {
-
                 let payload = {
                   tooltipVisible: e.isTooltipActive
                 }
@@ -649,7 +630,6 @@ class Example extends React.Component {
           }
           onMouseLeave={
             (e) => {
-              console.log('onMouseLeave', e);
               this.setState({
                 tooltipVisible: false
               });
@@ -702,6 +682,7 @@ const XAxis = require('../cartesian/XAxis').default;
 const YAxis = require('../cartesian/YAxis').default;
 const Legend = require('../component/Legend').default;
 const ThemeManager = require('prism-reactjs').ThemeManager;
+
 const data = [
   {
     "name": "Mar",
@@ -757,7 +738,7 @@ class Example extends React.Component {
 <Example />
 ```
 
-OG BarChart
+Vanilla BarChart
 ```js
 const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const Bar = require('../cartesian/Bar').default;

@@ -2,6 +2,7 @@ import React, { Component, cloneElement, isValidElement, createElement } from 'r
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import _ from 'lodash';
+import { ThemeManager } from 'prism-reactjs';
 import Surface from '../container/Surface';
 import Layer from '../container/Layer';
 import Tooltip from '../component/Tooltip';
@@ -648,7 +649,7 @@ const generateCategoricalChart = ({
 
       return {
         stroke: 'none',
-        fill: '#f2f4f6',
+        fill: ThemeManager.getVar('light-gray-3'),
         x: layout === 'horizontal' ? activeCoordinate.x - halfSize : offset.left + 0.5,
         y: layout === 'horizontal' ? offset.top + 0.5 : activeCoordinate.y - halfSize,
         width: layout === 'horizontal' ? tooltipAxisBandSize : offset.width - 1,
@@ -1342,15 +1343,13 @@ const generateCategoricalChart = ({
         offset
       } = this.state;
 
-        console.log('renderTooltip', this.state, tooltipItem, activeCoordinate, tooltipItem.props.coordinate, activePayload);
-
       return cloneElement(tooltipItem, {
         viewBox: { ...offset, x: offset.left, y: offset.top },
         active: isTooltipActive,
         graphicalItemPayload: activeTooltipIndex > -1 ? this.state.formatedGraphicalItems[0].props.data[activeTooltipIndex] : {},
         label: activeLabel,
         payload: isTooltipActive ? activePayload : [],
-        // Bug fix: If not set then let chart define it
+        // Recharts Bug fix: If not set then let chart define it
         coordinate: tooltipItem.props.coordinate ? tooltipItem.props.coordinate : activeCoordinate,
       });
     }
