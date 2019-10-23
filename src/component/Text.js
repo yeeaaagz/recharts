@@ -119,6 +119,7 @@ class Text extends Component {
 
   render() {
     const {
+      active,
       dx,
       dy,
       textAnchor,
@@ -170,6 +171,7 @@ class Text extends Component {
         x={x}
         y={y}
         className={classNames(className, 'recharts-text ntnx')}
+        data-active={ active }
         textAnchor={textAnchor}
       >
         {

@@ -3,10 +3,10 @@
  */
 import PropTypes from 'prop-types';
 import generateCategoricalChart from './generateCategoricalChart';
-import Bar from '../cartesian/Bar';
-import XAxis from '../cartesian/XAxis';
-import YAxis from '../cartesian/YAxis';
-import { formatAxisMap } from '../util/CartesianUtils';
+import Bar from '../../cartesian/Bar';
+import XAxis from '../../cartesian/XAxis';
+import YAxis from '../../cartesian/YAxis';
+import { formatAxisMap } from '../../util/CartesianUtils';
 
 /**
  * @component

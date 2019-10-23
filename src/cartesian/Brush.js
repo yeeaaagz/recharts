@@ -6,12 +6,14 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { scalePoint } from 'd3-scale';
 import _ from 'lodash';
+import { ThemeManager } from 'prism-reactjs';
 import { getValueByDataKey } from '../util/ChartUtils';
 import pureRender from '../util/PureRender';
 import Layer from '../container/Layer';
 import Text from '../component/Text';
 import { isNumber } from '../util/DataUtils';
 import { generatePrefixStyle } from '../util/CssPrefixUtils';
+import './Brush.less'
 
 @pureRender
 class Brush extends Component {
@@ -50,11 +52,11 @@ class Brush extends Component {
   };
 
   static defaultProps = {
-    height: 40,
+    height: 15,
     travellerWidth: 5,
     gap: 1,
     fill: '#fff',
-    stroke: '#666',
+    stroke: 'none',
     padding: { top: 1, right: 1, bottom: 1, left: 1 },
     leaveTimeOut: 1000,
   };
@@ -372,28 +374,41 @@ class Brush extends Component {
 
   renderSlide(startX, endX) {
     const { y, height, stroke } = this.props;
-
+    const sliderHeight = 4;
+    const sliderPos = y + Math.ceil(height / 2) -  Math.ceil(sliderHeight / 2);
     return (
-      <rect
-        className="recharts-brush-slide"
-        onMouseEnter={this.handleEnterSlideOrTraveller}
-        onMouseLeave={this.handleLeaveSlideOrTraveller}
-        onMouseDown={this.handleSlideDragStart}
-        onTouchStart={this.handleSlideDragStart}
-        style={{ cursor: 'move' }}
-        stroke="none"
-        fill={stroke}
-        fillOpacity={0.2}
-        x={Math.min(startX, endX)}
-        y={y}
-        width={Math.abs(endX - startX)}
-        height={height}
-      />
+      <Layer className="brush-slider-group">
+        <rect
+          className="recharts-brush-slide ntnx"
+          fill={ ThemeManager.getVar('light-gray-3') }
+          x={Math.min(startX, endX)}
+          y={ sliderPos }
+          rx={ 4 }
+          ry={ 4 }
+          width={Math.abs(endX - startX)}
+          height={ sliderHeight }
+        />
+        <rect
+          className="recharts-brush-slide-grabber ntnx"
+          onMouseEnter={this.handleEnterSlideOrTraveller}
+          onMouseLeave={this.handleLeaveSlideOrTraveller}
+          onMouseDown={this.handleSlideDragStart}
+          onTouchStart={this.handleSlideDragStart}
+          style={{ cursor: 'move' }}
+          fill='rgba(255, 255, 255, 0)'
+          x={Math.min(startX, endX)}
+          y={y}
+          rx={ 4 }
+          ry={ 4 }
+          width={Math.abs(endX - startX)}
+          height={height}
+        />
+      </Layer>
     );
   }
 
   renderText() {
-    const { startIndex, endIndex, y, height, travellerWidth,
+    const { hideText, startIndex, endIndex, y, height, travellerWidth,
       stroke } = this.props;
     const { startX, endX } = this.state;
     const offset = 5;
@@ -401,29 +416,33 @@ class Brush extends Component {
       pointerEvents: 'none',
       fill: stroke,
     };
+    if (!hideText) {
+      return (
+        <Layer className="recharts-brush-texts">
+          <Text
+            textAnchor="end"
+            verticalAnchor="middle"
+            x={Math.min(startX, endX) - offset}
+            y={y + height / 2}
+            {...attrs}
+          >
+            {this.getTextOfTick(startIndex)}
+          </Text>
+          <Text
+            textAnchor="start"
+            verticalAnchor="middle"
+            x={Math.max(startX, endX) + travellerWidth + offset}
+            y={y + height / 2}
+            {...attrs}
+          >
+            {this.getTextOfTick(endIndex)}
+          </Text>
+        </Layer>
+      );
+    }
 
-    return (
-      <Layer className="recharts-brush-texts">
-        <Text
-          textAnchor="end"
-          verticalAnchor="middle"
-          x={Math.min(startX, endX) - offset}
-          y={y + height / 2}
-          {...attrs}
-        >
-          {this.getTextOfTick(startIndex)}
-        </Text>
-        <Text
-          textAnchor="start"
-          verticalAnchor="middle"
-          x={Math.max(startX, endX) + travellerWidth + offset}
-          y={y + height / 2}
-          {...attrs}
-        >
-          {this.getTextOfTick(endIndex)}
-        </Text>
-      </Layer>
-    );
+    return null;
+
   }
 
   render() {

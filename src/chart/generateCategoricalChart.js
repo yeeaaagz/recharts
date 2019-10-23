@@ -248,6 +248,8 @@ const generateCategoricalChart = ({
           graphicalItems, axisType, axisIdKey, stackGroups, dataStartIndex, dataEndIndex });
       }
 
+
+      console.log('getAxisMap', axisMap);
       return axisMap;
     }
 
@@ -488,12 +490,25 @@ const generateCategoricalChart = ({
     }
 
     /**
+     * Return active cell data for each of the graphical items for the current item index
+     */
+    getActiveCellData(formatedGraphicalItems, activeIndex) {
+      return _.compact(_.map(formatedGraphicalItems, (item) => {
+        if (item.props && item.props.data && item.props.data[activeIndex]) {
+          return item.props.data[activeIndex];
+        }
+      }));
+    }
+
+    /**
      * Get the information of mouse in chart, return null when the mouse is not in the chart
      * @param  {Object} event    The event object
      * @return {Object}          Mouse data
      */
     getMouseInfo(event) {
       if (!this.container) { return null; }
+
+      console.log('getMouseInfo', this.state);
 
       const containerOffset = getOffset(this.container);
       const e = calculateChartCoordinate(event, containerOffset);
@@ -523,7 +538,7 @@ const generateCategoricalChart = ({
 
         return {
           ...e,
-          activeCellData: this.state.formatedGraphicalItems[0].props.data[activeIndex],
+          activeCellData: this.getActiveCellData(this.state.formatedGraphicalItems, activeIndex),
           activeTooltipIndex: activeIndex,
           activeLabel, activePayload, activeCoordinate,
         };
@@ -550,7 +565,7 @@ const generateCategoricalChart = ({
       return graphicalItems.reduce((result, child) => {
         const { hide } = child.props;
 
-        if (hide) { return result; }
+        // if (hide) { return result; }
 
         const { dataKey, name, unit, formatter, data, tooltipType } = child.props;
         let payload;
@@ -568,6 +583,7 @@ const generateCategoricalChart = ({
           ...getPresentationAttributes(child),
           dataKey, unit, formatter,
           name: name || dataKey,
+          hide,
           color: getMainColorOfGraphicItem(child),
           value: getValueByDataKey(payload, dataKey),
           type: tooltipType,
@@ -603,6 +619,8 @@ const generateCategoricalChart = ({
             [`${entry.axisType}Ticks`]: getTicksOfAxis(axis),
           };
         }, {});
+
+        console.log('graphicalItems', item);
         const cateAxis = axisObj[cateAxisName];
         const cateTicks = axisObj[`${cateAxisName}Ticks`];
         const stackedData = stackGroups && stackGroups[numericAxisId] &&
@@ -639,6 +657,7 @@ const generateCategoricalChart = ({
         }
       });
 
+      console.log('getFormatItems', formatedItems);
       return formatedItems;
     }
 
@@ -781,8 +800,11 @@ const generateCategoricalChart = ({
       const stackGroups = getStackGroupsByAxisId(
         data, graphicalItems, `${numericAxisName}Id`, `${cateAxisName}Id`, stackOffset, reverseStackOrder
       );
+
       const axisObj = axisComponents.reduce((result, entry) => {
         const name = `${entry.axisType}Map`;
+
+        console.log('axisObj');
 
         return {
           ...result,
@@ -811,6 +833,7 @@ const generateCategoricalChart = ({
         graphicalItems, stackGroups, offset,
       });
 
+      console.log('updateStateOfAxisMapsOffsetAndStackGroups', props, dataStartIndex, dataEndIndex, updateId, formatedGraphicalItems);
       return {
         formatedGraphicalItems, graphicalItems, offset, stackGroups,
         ...ticksObj, ...axisObj,
@@ -884,6 +907,8 @@ const generateCategoricalChart = ({
         offset = appendOffsetOfLegend(offset, graphicalItems, props, legendBox);
       }
 
+      // console.log('calculateOffset', props);
+
       return {
         brushBottom,
         ...offset,
@@ -936,6 +961,7 @@ const generateCategoricalChart = ({
             y: layout === 'horizontal' ? validateChartY : tooltipTicks[activeTooltipIndex].coordinate,
           } : originCoordinate;
 
+          console.log('handleReceiveSyncEvent', handleReceiveSyncEvent);
           this.setState({ ...data, activeLabel, activeCoordinate, activePayload });
         } else {
           this.setState(data);
@@ -988,6 +1014,7 @@ const generateCategoricalChart = ({
       const mouse = this.getMouseInfo(e);
       const nextState = mouse ? { ...mouse, isTooltipActive: true } : { isTooltipActive: false };
 
+      console.log('triggeredAfterMouseMove', nextState);
       this.setState(nextState);
       this.triggerSyncEvent(nextState);
 
@@ -1002,6 +1029,8 @@ const generateCategoricalChart = ({
      * @return {Object} no return
      */
     handleItemMouseEnter = (el) => {
+
+      console.log('handleItemMouseEnter', handleItemMouseEnter);
       this.setState(() => ({
         isTooltipActive: true,
         activeItem: el,
@@ -1219,6 +1248,8 @@ const generateCategoricalChart = ({
       const { xAxisMap } = this.state;
       const axisObj = xAxisMap[element.props.xAxisId];
 
+
+      console.log('renderXAxis');
       return this.renderAxis(axisObj, element, displayName, index);
     };
 
@@ -1239,6 +1270,8 @@ const generateCategoricalChart = ({
      */
     renderAxis(axisOptions, element, displayName, index) {
       const { width, height } = this.props;
+
+      console.log('renderAxis');
 
       return (
         <CartesianAxis
@@ -1324,6 +1357,15 @@ const generateCategoricalChart = ({
       });
     }
 
+    getCurrentGraphicalItems(items, index) {
+      return _.map(items, (item) => {
+        console.log('getCurrentGraphicalItems', item, index);
+        if ( item.props && item.props.data && item.props.data[index]) {
+          return item.props.data[index];
+        }
+      });
+    }
+
     /**
      * Draw Tooltip
      * @return {ReactElement}  The instance of Tooltip
@@ -1343,10 +1385,11 @@ const generateCategoricalChart = ({
         offset
       } = this.state;
 
+      console.log('generate - renderTooltip');
       return cloneElement(tooltipItem, {
         viewBox: { ...offset, x: offset.left, y: offset.top },
         active: isTooltipActive,
-        graphicalItemPayload: activeTooltipIndex > -1 ? this.state.formatedGraphicalItems[0].props.data[activeTooltipIndex] : {},
+        graphicalItemPayload: activeTooltipIndex > -1 ? this.getCurrentGraphicalItems(this.state.formatedGraphicalItems, activeTooltipIndex) : {},
         label: activeLabel,
         payload: isTooltipActive ? activePayload : [],
         // Recharts Bug fix: If not set then let chart define it
@@ -1550,7 +1593,7 @@ const generateCategoricalChart = ({
           </Surface>
         );
       }
-
+      console.log('generateCatChart - render', children);
       const events = this.parseEventsOfWrapper();
       return (
         <div

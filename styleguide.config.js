@@ -8,7 +8,7 @@ module.exports = {
   require: [
     path.join(__dirname, 'node_modules/prism-reactjs/dist/index.css')
   ],
-  components: 'src/**/*.js',
+  components: 'src/ntnx/**/*.js',
   resolver: jsParse.resolver.findAllComponentDefinitions,
   propsParser(filePath, source, resolver, handlers) {
     let docs = {};

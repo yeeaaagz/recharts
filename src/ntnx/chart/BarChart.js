@@ -2,25 +2,16 @@
  * @fileOverview Bar Chart
  */
 import PropTypes from 'prop-types';
-import generateCategoricalChart from './generateCategoricalChart';
-import Bar from '../cartesian/Bar';
-import XAxis from '../cartesian/XAxis';
-import YAxis from '../cartesian/YAxis';
-import { formatAxisMap } from '../util/CartesianUtils';
+import ReBarChart from '../../chart/BarChart';
+import Bar from '../../cartesian/Bar';
+import XAxis from '../../cartesian/XAxis';
+import YAxis from '../../cartesian/YAxis';
+import { formatAxisMap } from '../../util/CartesianUtils';
 
 /**
  * @component
  */
-export default class BarChart extends generateCategoricalChart({
-  chartName: 'BarChart',
-  GraphicalChild: Bar,
-  axisComponents: [
-    { axisType: 'xAxis', AxisComp: XAxis },
-    { axisType: 'yAxis', AxisComp: YAxis },
-  ],
-  formatAxisMap,
-}) {
-
+export default class BarChart extends ReBarChart {
   static defaultProps = {
     layout: 'horizontal',
     stackOffset: 'none',
