@@ -24,7 +24,13 @@ const config = {
         use: {
           loader: 'babel-loader',
           query: {
-            plugins: ['lodash'],
+            plugins: [
+              'lodash', 
+              ["@nutanix-ui/babel-plugin-prism-import", {
+                "libraryName": "prism-reactjs",
+                "style": "less"
+              }]
+            ],
           },
         }
       },
