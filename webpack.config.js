@@ -14,41 +14,69 @@ const config = {
   },
 
   module: {
-    rules: [{
-      test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      include: [
-        path.resolve(__dirname, 'src'),
-      ],
-      use: {
-        loader: 'babel-loader',
-        query: {
-          plugins: ['lodash'],
-        },
-      }
-    }],
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        include: [
+          path.resolve(__dirname, 'src'),
+        ],
+        use: {
+          loader: 'babel-loader',
+          query: {
+            plugins: [
+              'lodash', 
+              ["@nutanix-ui/babel-plugin-prism-import", {
+                "libraryName": "prism-reactjs",
+                "style": "less"
+              }]
+            ],
+          },
+        }
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'less-loader',
+          }
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+        // For loading fonts.
+        {
+          test: /\.(woff|woff2|eot|eot\?iefix|ttf|svg|gif)$/,
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]'
+          }
+        }
+    ]
   },
 
-  externals: {
-    react: {
-      root: 'React',
-      commonjs2: 'react',
-      commonjs: 'react',
-      amd: 'react',
-    },
-    'react-dom': {
-      root: 'ReactDOM',
-      commonjs2: 'react-dom',
-      commonjs: 'react-dom',
-      amd: 'react-dom'
-    },
-    'prop-types': {
-      root: 'PropTypes',
-      commonjs2: 'prop-types',
-      commonjs: 'prop-types',
-      amd: 'prop-types',
-    },
-  },
+  externals: [
+    'react',
+    'react-dom',
+    'core-js',
+    'd3-interpolate',
+    'd3-scale',
+    'd3-shape',
+    'lodash',
+    'prism-reactjs',
+    'prop-types',
+    'react-resize-detector',
+    'react-smooth',
+    'recharts-scale',
+    'reduce-css-calc'
+  ],
 
   plugins: [
     new webpack.DefinePlugin({

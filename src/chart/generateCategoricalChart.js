@@ -2,6 +2,7 @@ import React, { Component, cloneElement, isValidElement, createElement } from 'r
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import _ from 'lodash';
+import { ThemeManager } from 'prism-reactjs';
 import Surface from '../container/Surface';
 import Layer from '../container/Layer';
 import Tooltip from '../component/Tooltip';
@@ -11,6 +12,7 @@ import Cross from '../shape/Cross';
 import Sector from '../shape/Sector';
 import Dot from '../shape/Dot';
 import Rectangle from '../shape/Rectangle';
+import './chart.less';
 
 import { findAllByType, findChildByType, getDisplayName, parseChildIndex,
   getPresentationAttributes, validateWidthHeight, isChildrenEqual,
@@ -513,6 +515,7 @@ const generateCategoricalChart = ({
       const pos = this.calculateTooltipPos(rangeObj);
       const activeIndex = calculateActiveTickIndex(pos, ticks, tooltipTicks, axis);
 
+      // Tooltip info available for cell
       if (activeIndex >= 0 && tooltipTicks) {
         const activeLabel = tooltipTicks[activeIndex] && tooltipTicks[activeIndex].value;
         const activePayload = this.getTooltipContent(activeIndex, activeLabel);
@@ -520,6 +523,7 @@ const generateCategoricalChart = ({
 
         return {
           ...e,
+          activeCellData: this.state.formatedGraphicalItems[0].props.data[activeIndex],
           activeTooltipIndex: activeIndex,
           activeLabel, activePayload, activeCoordinate,
         };
@@ -645,7 +649,7 @@ const generateCategoricalChart = ({
 
       return {
         stroke: 'none',
-        fill: '#ccc',
+        fill: ThemeManager.getVar('light-gray-3'),
         x: layout === 'horizontal' ? activeCoordinate.x - halfSize : offset.left + 0.5,
         y: layout === 'horizontal' ? offset.top + 0.5 : activeCoordinate.y - halfSize,
         width: layout === 'horizontal' ? tooltipAxisBandSize : offset.width - 1,
@@ -1330,15 +1334,23 @@ const generateCategoricalChart = ({
 
       if (!tooltipItem) { return null; }
 
-      const { isTooltipActive, activeCoordinate, activePayload,
-        activeLabel, offset } = this.state;
+      const {
+        isTooltipActive,
+        activeCoordinate,
+        activePayload,
+        activeLabel,
+        activeTooltipIndex,
+        offset
+      } = this.state;
 
       return cloneElement(tooltipItem, {
         viewBox: { ...offset, x: offset.left, y: offset.top },
         active: isTooltipActive,
+        graphicalItemPayload: activeTooltipIndex > -1 ? this.state.formatedGraphicalItems[0].props.data[activeTooltipIndex] : {},
         label: activeLabel,
         payload: isTooltipActive ? activePayload : [],
-        coordinate: activeCoordinate,
+        // Recharts Bug fix: If not set then let chart define it
+        coordinate: tooltipItem.props.coordinate ? tooltipItem.props.coordinate : activeCoordinate,
       });
     }
 
@@ -1542,7 +1554,7 @@ const generateCategoricalChart = ({
       const events = this.parseEventsOfWrapper();
       return (
         <div
-          className={classNames('recharts-wrapper', className)}
+          className={classNames(className, 'recharts-wrapper ntnx')}
           style={{ position: 'relative', cursor: 'default', width, height, ...style }}
           {...events}
           ref={(node) => { this.container = node; }}
