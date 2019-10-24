@@ -6,7 +6,6 @@ let themeVars = {};
 
 module.exports = {
   require: [
-    'babel-polyfill',
     path.join(__dirname, 'node_modules/prism-reactjs/dist/index.css')
   ],
   components: 'src/**/*.js',
