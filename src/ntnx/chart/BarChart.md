@@ -178,7 +178,6 @@ function generateData() {
     consolidatedData = [...consolidatedData, ...mappedData];
   }
 
-  console.log('generateData', dataLength, consolidatedData);
   return consolidatedData;
 }
 
@@ -299,7 +298,6 @@ class Example extends React.Component {
 
   getCatColor(id, type) {
     cat = this.state.sequentialColors ? 'sequential' : 'category';   
-    console.log('getCatColor', id, type, catColors);
     return catColors[cat][id][type];
   }
 
@@ -315,8 +313,6 @@ class Example extends React.Component {
   }
 
   getTooltipPayload(e, prevState) {
-    console.log('getTooltipPayload', e);
-
     let payload = {
       tooltipVisible: e && e.isTooltipActive || e && !!(e.activeTooltipIndex > -1)
     }
@@ -362,7 +358,6 @@ class Example extends React.Component {
 
     if (activeX && prevX && activeX !== prevX) {
       payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-      console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
     }
 
     return payload;
@@ -370,8 +365,6 @@ class Example extends React.Component {
 
   renderTooltipCats(payloads) {
     return payloads.map(payload => { 
-      console.log('renderTooltipCats', payload);
-
       return (
         <FlexLayout justifyContent="space-between">
           <Badge
@@ -391,7 +384,6 @@ class Example extends React.Component {
 
   renderTooltipContent() {
     let content = '';
-    console.log('renderTooltipContent');
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && !isEmpty(this.state.activePayload[0].payload)) {
       const totalVal = this.state.activePayload[0].payload.cat1 + this.state.activePayload[0].payload.cat2 + this.state.activePayload[0].payload.cat3;
       content = (
@@ -420,14 +412,13 @@ class Example extends React.Component {
 
   renderPopoverContent() {
     let content = '';
-    console.log('renderPopoverContent');
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload) {
       const payload = this.state.activePayload;
       const payloadName = payload[0].payload.name;
       const payloadTotal = `${payload[0].payload.cat1 + payload[0].payload.cat2 + payload[0].payload.cat3}%`;
       content = (
         <HeaderFooterLayout
-          onClick={ (e) => { e.stopPropagation(); console.log('onClick - Popover') } }
+          onClick={ (e) => { e.stopPropagation(); } }
           style={{width: '400px'}}
           itemSpacing="0px"
           header={
@@ -468,7 +459,6 @@ class Example extends React.Component {
 
   renderTooltipCursor() {
     const { cellWidth } = this.state;
-    console.log('renderTooltipCursor', cellWidth);
     const width = cellWidth ? `${cellWidth}px` : '1px';
 
     return (
@@ -507,7 +497,6 @@ class Example extends React.Component {
   renderTip() {
     const { tipType } = this.state;
 
-    console.log('renderTip', this.state);
     return (
       <Tooltip
         isAnimationActive={ false }
@@ -554,7 +543,6 @@ class Example extends React.Component {
   }
 
   getBarFillColor(bar, index) {
-    console.log('getBarFillColor', bar, index);
     const { barMouseDown, popoverVisible, activeTooltipIndex } = this.state;
     // Popover mode active
     if (popoverVisible) {
@@ -596,7 +584,6 @@ class Example extends React.Component {
           {
             this.props.data.map((entry, index) => {
               // Each bar contains a cell per data point
-              console.log('cell render', entry, index, this.state);
               return (
                 <Cell
                   style={ this.getBarTransitionState(bar, index) }
@@ -612,7 +599,6 @@ class Example extends React.Component {
   }
 
   renderBarChart() {
-    console.log('renderBarChart', this.props);
     return (
       <StackingLayout style={{width: '100%'}}>
         <FlexLayout alignItems="center" justifyContent="space-between">
@@ -632,7 +618,6 @@ class Example extends React.Component {
                   if (e) {
                      this.setState((prevState) => {
                       let payload = this.getTooltipPayload(e, prevState);
-                      console.log('onClick', e, payload);
                       // If popover is active, then dismiss
                       if (prevState.tipType === 'popover') {
                         payload.tipType = 'tooltip';
@@ -644,7 +629,6 @@ class Example extends React.Component {
                         payload.popoverVisible = true;
                       }
 
-                      console.log('onClick', payload, e, prevState);
                       setTimeout(() => {
                         this.setState({
                           tooltipAnimation: false
@@ -701,7 +685,6 @@ class Example extends React.Component {
   }
 
   render() {
-    console.log('render stuff', this.state);
     return (
       <StackingLayout>
         <ContainerLayout backgroundColor="white" border={ true }>
@@ -1029,7 +1012,6 @@ class DashboardChart extends React.Component {
   }
 
   render() {
-    console.log('renderererere', this.props);
     return this.renderChart();
   }
 }
@@ -1310,8 +1292,6 @@ class Example extends React.Component {
 
   handleCheckboxOnChange(e, id) {
     this.setState((prevState) => {
-        console.log('handleCheckboxOnChange', e, id);
-
         const payload = {};
 
         switch(id) {
@@ -1325,7 +1305,6 @@ class Example extends React.Component {
             payload.showCat3 = !prevState.showCat3;
             break;
         }
-
 
         return payload;
       });
@@ -1373,10 +1352,8 @@ class Example extends React.Component {
 
     if (activeX && prevX && activeX !== prevX) {
       payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-      console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
     }
 
-    console.log('onMouseMove', payload, e);
     return payload;
   }
 
@@ -1410,7 +1387,6 @@ class Example extends React.Component {
 
   renderTooltipCats(payloads) {
     return payloads.map(payload => { 
-      console.log('renderTooltipCats', payload);
 
       let color;
       switch(payload.fill) {
@@ -1444,7 +1420,6 @@ class Example extends React.Component {
 
   renderTooltipContent() {
     let content = '';
-    console.log('renderTooltipContent', this.state);
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && !isEmpty(this.state.activePayload[0].payload)) {
       const totalVal = this.state.activePayload[0].payload.cat1 + this.state.activePayload[0].payload.cat2 + this.state.activePayload[0].payload.cat3;
       content = (
@@ -1672,8 +1647,6 @@ class Example extends React.Component {
 
   handleCheckboxOnChange(e, id) {
     this.setState((prevState) => {
-        console.log('handleCheckboxOnChange', e, id);
-
         const payload = {};
 
         switch(id) {
@@ -1735,10 +1708,8 @@ class Example extends React.Component {
 
     if (activeX && prevX && activeX !== prevX) {
       payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-      console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
     }
 
-    console.log('onMouseMove', payload, e);
     return payload;
   }
 
@@ -1772,8 +1743,6 @@ class Example extends React.Component {
 
   renderTooltipCats(payloads) {
     return payloads.map(payload => { 
-      console.log('renderTooltipCats', payload);
-
       let color;
       switch(payload.fill) {
         case '#36d068':
@@ -1806,7 +1775,6 @@ class Example extends React.Component {
 
   renderTooltipContent() {
     let content = '';
-    console.log('renderTooltipContent', this.state);
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && !isEmpty(this.state.activePayload[0].payload)) {
       const totalVal = this.state.activePayload[0].payload.cat1 + this.state.activePayload[0].payload.cat2 + this.state.activePayload[0].payload.cat3;
       content = (
@@ -2200,7 +2168,6 @@ class Example extends React.Component {
 
   getCatColor(id, type) {
     cat = this.state.sequentialColors ? 'sequential' : 'category';   
-    console.log('getCatColor', id, type, catColors);
     return catColors[cat][id][type];
   }
 
@@ -2261,17 +2228,13 @@ class Example extends React.Component {
 
     if (activeX && prevX && activeX !== prevX) {
       payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-      console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
     }
 
-    console.log('onMouseMove', e);
     return payload;
   }
 
   renderTooltipCats(payloads) {
     return payloads.map(payload => { 
-      console.log('renderTooltipCats', payload);
-
       return (
         <FlexLayout justifyContent="space-between">
           <Badge
@@ -2291,7 +2254,6 @@ class Example extends React.Component {
 
   renderTooltipContent() {
     let content = '';
-    console.log('renderTooltipContent');
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && !isEmpty(this.state.activePayload[0].payload)) {
       const totalVal = this.state.activePayload[0].payload.cat1 + this.state.activePayload[0].payload.cat2 + this.state.activePayload[0].payload.cat3;
       content = (
@@ -2320,14 +2282,13 @@ class Example extends React.Component {
 
   renderPopoverContent() {
     let content = '';
-    console.log('renderPopoverContent');
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload) {
       const payload = this.state.activePayload;
       const payloadName = payload[0].payload.name;
       const payloadTotal = `${payload[0].payload.cat1 + payload[0].payload.cat2 + payload[0].payload.cat3}%`;
       content = (
         <HeaderFooterLayout
-          onClick={ (e) => { e.stopPropagation(); console.log('onClick - Popover') } }
+          onClick={ (e) => { e.stopPropagation(); } }
           style={{width: '400px'}}
           itemSpacing="0px"
           header={
@@ -2368,7 +2329,6 @@ class Example extends React.Component {
 
   renderTooltipCursor() {
     const { cellWidth } = this.state;
-    console.log('renderTooltipCursor', cellWidth);
     const width = cellWidth ? `${cellWidth}px` : '1px';
 
     return (
@@ -2407,7 +2367,6 @@ class Example extends React.Component {
   renderTip() {
     const { tipType } = this.state;
 
-    console.log('renderTip', this.state);
     return (
       <Tooltip
         isAnimationActive={ false }
@@ -2494,7 +2453,6 @@ class Example extends React.Component {
           {
             data.map((entry, index) => {
               // Each bar contains a cell per data point
-              console.log('cell render', entry, index, this.state);
               return (
                 <Cell
                   style={ this.getBarTransitionState(bar, index) }
@@ -2539,7 +2497,6 @@ class Example extends React.Component {
                       payload.popoverVisible = true;
                     }
 
-                    console.log('onClick', payload, e, prevState);
                     setTimeout(() => {
                       this.setState({
                         tooltipAnimation: false
@@ -2594,7 +2551,6 @@ class Example extends React.Component {
   }
 
   render() {
-    console.log('render stuff', this.state);
     return (
       <StackingLayout>
         <ContainerLayout backgroundColor="white" border={ true }>
@@ -2711,7 +2667,7 @@ class Example extends React.Component {
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && this.state.activePayload[0].payload.value) {
       content = (
         <HeaderFooterLayout
-          onClick={ (e) => { e.stopPropagation(); console.log('onClick - Popover') } }
+          onClick={ (e) => { e.stopPropagation(); } }
           style={{width: '400px'}}
           itemSpacing="0px"
           header={
@@ -2804,7 +2760,6 @@ class Example extends React.Component {
 
                 if (activeX && prevX && activeX !== prevX) {
                   payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-                  console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
                 }
 
                 return payload;
@@ -2849,7 +2804,6 @@ class Example extends React.Component {
 
                   if (activeX && prevX && activeX !== prevX) {
                     payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-                    console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
                   }
 
                   return payload;
@@ -3250,10 +3204,8 @@ class Example extends React.Component {
 
                 if (activeX && prevX && activeX !== prevX) {
                   payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-                  console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
                 }
 
-                console.log('onMouseMove', payload, e);
                 return payload;
 
               });

@@ -189,12 +189,9 @@ export default class Tooltip extends ReTooltip {
   };
 
   getHighestPoint(data) {
-    console.log('getHighestPoint', data);
     const points = _.map(data, (item) => {
       return item && item.y || 0;
     }) || 0;
-
-    // console.log('points', points, Math.min(...points));
 
     return Math.min(...points);
   }
@@ -241,14 +238,11 @@ export default class Tooltip extends ReTooltip {
     };
     let translateX, translateY;
 
-
-
     // Info:
     // this.props.graphicalItemPayload.x = Left point of the bar
     // coordinate.x - The center point of the bar
     // this.props.graphicalItemPayload.width - width of bar
     // boxWidth - cursor box width
-
     if (position && isNumber(position.x) && isNumber(position.y)) {
       translateX = position.x;
       translateY = position.y;
@@ -259,19 +253,12 @@ export default class Tooltip extends ReTooltip {
            translateX = this.props.graphicalItemPayload.x;
            translateY = this.props.graphicalItemPayload.y;
         } else if (placement === 'top-right') {
-           // translateX = coordinate.x + ( viewBox.left / 2 ) + 15;
-
            translateX = 0;
            if (this.props.graphicalItemPayload && this.props.graphicalItemPayload[0] && this.props.graphicalItemPayload[0].x) {
             translateX = this.props.graphicalItemPayload[0].x + this.props.graphicalItemPayload[0].width - boxWidth;
            }
 
-
            translateY = this.getHighestPoint(this.props.graphicalItemPayload);
-            // translateY = 0;
-
-            // this.getHighestPoint(this.props.graphicalItemPayload);
-           console.log('Tooltip', this.props.graphicalItemPayload,  translateX, translateY);
         } else if (placement === 'center') {
           translateX = coordinate.x - (boxWidth / 2);
           translateY = position && isNumber(position.y) ? position.y : Math.max(
