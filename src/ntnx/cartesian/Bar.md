@@ -8,12 +8,12 @@ label: Format
 minPointSize: BarChartWithMinHeight
 ```js
 const BarChart = require('../chart/BarChart').default;
-const CartesianGrid = require('./CartesianGrid').default;
-const XAxis = require('./XAxis').default;
-const YAxis = require('./YAxis').default;
-const Tooltip = require('../component/Tooltip').default;
-const Legend = require('../component/Legend').default;
-const LabelList = require('../component/LabelList').default;
+const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../../component/Tooltip').default;
+const Legend = require('../../component/Legend').default;
+const LabelList = require('../../component/LabelList').default;
 
 const data = [
   {
@@ -86,12 +86,12 @@ class Example extends React.Component {
 background: BarChartHasBackground
 ```js
 const BarChart = require('../chart/BarChart').default;
-const CartesianGrid = require('./CartesianGrid').default;
-const XAxis = require('./XAxis').default;
-const YAxis = require('./YAxis').default;
-const Tooltip = require('../component/Tooltip').default;
-const Legend = require('../component/Legend').default;
-const LabelList = require('../component/LabelList').default;
+const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../../component/Tooltip').default;
+const Legend = require('../../component/Legend').default;
+const LabelList = require('../../component/LabelList').default;
 
 const data = [
   {
@@ -152,13 +152,13 @@ shape: Format
 shape: CustomShapeBarChart
 ```js
 const BarChart = require('../chart/BarChart').default;
-const CartesianGrid = require('./CartesianGrid').default;
-const XAxis = require('./XAxis').default;
-const YAxis = require('./YAxis').default;
-const Tooltip = require('../component/Tooltip').default;
-const Legend = require('../component/Legend').default;
-const Cell = require('../component/Cell').default;
-const LabelList = require('../component/LabelList').default;
+const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../../component/Tooltip').default;
+const Legend = require('../../component/Legend').default;
+const Cell = require('../../component/Cell').default;
+const LabelList = require('../../component/LabelList').default;
 
 import { scaleOrdinal } from 'd3-scale';
 import { schemeCategory10 } from 'd3-scale-chromatic';
@@ -244,13 +244,13 @@ stackId: Format
 stackId: StackedBarChart
 ```js
 const BarChart = require('../chart/BarChart').default;
-const CartesianGrid = require('./CartesianGrid').default;
-const XAxis = require('./XAxis').default;
-const YAxis = require('./YAxis').default;
-const Tooltip = require('../component/Tooltip').default;
-const Legend = require('../component/Legend').default;
-const Cell = require('../component/Cell').default;
-const LabelList = require('../component/LabelList').default;
+const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../../component/Tooltip').default;
+const Legend = require('../../component/Legend').default;
+const Cell = require('../../component/Cell').default;
+const LabelList = require('../../component/LabelList').default;
 
 const data = [
   {
@@ -305,13 +305,13 @@ class Example extends React.Component {
 stackId: MixBarChart
 ```js
 const BarChart = require('../chart/BarChart').default;
-const CartesianGrid = require('./CartesianGrid').default;
-const XAxis = require('./XAxis').default;
-const YAxis = require('./YAxis').default;
-const Tooltip = require('../component/Tooltip').default;
-const Legend = require('../component/Legend').default;
-const Cell = require('../component/Cell').default;
-const LabelList = require('../component/LabelList').default;
+const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../../component/Tooltip').default;
+const Legend = require('../../component/Legend').default;
+const Cell = require('../../component/Cell').default;
+const LabelList = require('../../component/LabelList').default;
 
 const data = [
   {
@@ -367,13 +367,13 @@ class Example extends React.Component {
 onClick: BarChartWithCustomizedEvent
 ```js
 const BarChart = require('../chart/BarChart').default;
-const CartesianGrid = require('./CartesianGrid').default;
-const XAxis = require('./XAxis').default;
-const YAxis = require('./YAxis').default;
-const Tooltip = require('../component/Tooltip').default;
-const Legend = require('../component/Legend').default;
-const Cell = require('../component/Cell').default;
-const LabelList = require('../component/LabelList').default;
+const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../../component/Tooltip').default;
+const Legend = require('../../component/Legend').default;
+const Cell = require('../../component/Cell').default;
+const LabelList = require('../../component/LabelList').default;
 
 const data = [
   {

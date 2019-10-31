@@ -2,7 +2,10 @@ import PropTypes from 'prop-types';
 import ReBar from '../../cartesian/Bar';
 import { LEGEND_TYPES, TOOLTIP_TYPES, isSsr } from '../../util/ReactUtils';
 
-class Bar extends ReBar {
+/**
+ * @component
+ */
+export default class Bar extends ReBar {
 
   static propTypes = {
     /**
@@ -193,5 +196,3 @@ class Bar extends ReBar {
     onAnimationEnd: () => {},
   };
 }
-
-export default Bar;

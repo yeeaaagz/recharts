@@ -4,7 +4,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { ThemeManager } from 'prism-reactjs';
 import pureRender from '../util/PureRender';
 import { PRESENTATION_ATTRIBUTES, getPresentationAttributes } from '../util/ReactUtils';
 import { isNumber } from '../util/DataUtils';
@@ -46,7 +45,8 @@ class CartesianGrid extends Component {
     horizontalPoints: [],
     // The abscissas of vertical grid lines
     verticalPoints: [],
-    stroke: ThemeManager.getVar('light-gray-3'),
+
+    stroke: '#ccc',
     fill: 'none',
     // The fill of colors of grid lines
     verticalFill: [],

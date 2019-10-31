@@ -1,7 +1,7 @@
 Brushing
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
-const Brush = require('../../cartesian/Brush').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
+const Brush = require('../cartesian/Brush').default;
 const Cell = require('../../component/Cell').default;
 const isNull = require('lodash').isNull;
 const map = require('lodash').map;
@@ -10,7 +10,7 @@ const Bar = require('../cartesian/Bar').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 
 import {
@@ -739,12 +739,12 @@ class Example extends React.Component {
 
 Dashboard Presentation
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const Cell = require('../../component/Cell').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
@@ -1217,14 +1217,14 @@ class Example extends React.Component {
 
 Grouped Bar Chart
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const isEmpty = require('lodash').isEmpty;
 const Bar = require('../cartesian/Bar').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 
 import {
@@ -1579,14 +1579,14 @@ class Example extends React.Component {
 
 Stacked Bar Chart
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const isEmpty = require('lodash').isEmpty;
 const Bar = require('../cartesian/Bar').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 
 import {
@@ -1941,7 +1941,7 @@ class Example extends React.Component {
 
 Stacked Bar Chart with Hover and Click Interaction
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const Cell = require('../../component/Cell').default;
 const isNull = require('lodash').isNull;
 const isEmpty = require('lodash').isEmpty;
@@ -1949,7 +1949,7 @@ const Bar = require('../cartesian/Bar').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 
 import {
@@ -2628,12 +2628,12 @@ class Example extends React.Component {
 
 Interactions: On Click for Popover.
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const Cell = require('../../component/Cell').default;
 
@@ -2909,12 +2909,12 @@ class Example extends React.Component {
 
 Interactions: On Click. On click, change the context to show more details / meta data associated with the bar chart. The back link should take the user back to the bar chart. The interim state or clicked state should remove the hover background and reduce the opacity of the other bars to 20%.
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const Cell = require('../../component/Cell').default;
 
@@ -3152,12 +3152,12 @@ class Example extends React.Component {
 
 Interactions: On Hover. On hover show tool tip at top of the (hover) bar that is highlighted.
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const ThemeManager = require('prism-reactjs').ThemeManager;
 
@@ -3306,7 +3306,7 @@ class Example extends React.Component {
 
 Basic
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
@@ -3371,11 +3371,11 @@ class Example extends React.Component {
 
 Vanilla BarChart
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const data = [
   {
@@ -3437,10 +3437,10 @@ syncId: SynchronizedAreaChart
 ```js
 const Area = require('../../cartesian/Area').default;
 const AreaChart = require('../../chart/AreaChart').default;
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const data = [
   {
     name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
@@ -3547,10 +3547,10 @@ const data = [
 
 barSize: MixBarChart
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const Bar = require('../cartesian/Bar').default;
 const data = [

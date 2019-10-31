@@ -1,6 +1,3 @@
-/**
- * @fileOverview Bar Chart
- */
 import PropTypes from 'prop-types';
 import ReBarChart from '../../chart/BarChart';
 import Bar from '../../cartesian/Bar';

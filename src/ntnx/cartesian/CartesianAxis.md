@@ -1,13 +1,13 @@
 
 Tick: CustomizedLabelLineChart
 ```js
-const LineChart = require('../chart/LineChart').default;
-const Line = require('./Line').default;
-const CartesianGrid = require('./CartesianGrid').default;
-const XAxis = require('./XAxis').default;
-const YAxis = require('./YAxis').default;
-const Tooltip = require('../component/Tooltip').default;
-const Legend = require('../component/Legend').default;
+const LineChart = require('../../chart/LineChart').default;
+const Line = require('../../cartesian/Line').default;
+const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../../component/Tooltip').default;
+const Legend = require('../../component/Legend').default;
 
 const data = [
   {
