@@ -97,7 +97,7 @@ export default class Brush extends ReBrush {
     height: 15,
     travellerWidth: 5,
     gap: 1,
-    fill: '#fff',
+    fill: ThemeManager.getVar('white'),
     stroke: 'none',
     padding: { top: 1, right: 1, bottom: 1, left: 1 },
     leaveTimeOut: 1000,

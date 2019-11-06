@@ -74,7 +74,7 @@ export default class Bar extends ReBar {
      */
     onMouseOut: PropTypes.func,
     /**
-     * The customized event handler of moustenter on the bars in this group.
+     * The customized event handler of mousetenter on the bars in this group.
      */
     onMouseEnter: PropTypes.func,
     /**
@@ -161,11 +161,11 @@ export default class Bar extends ReBar {
       value: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.array]),
     })),
     /**
-     * The customized event handler of animtion start.
+     * The customized event handler of animation start.
      */
     onAnimationStart: PropTypes.func,
     /**
-     * The customized event handler of animtion end.
+     * The customized event handler of animation end.
      */
     onAnimationEnd: PropTypes.func,
     /**

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import classNames from 'classnames';
+import { ThemeManager } from 'prism-reactjs';
 import ReCartesianAxis from '../../cartesian/CartesianAxis';
 import { shallowEqual } from '../../util/PureRender';
 import { getStringSize } from '../../util/DOMUtils';
@@ -134,7 +135,7 @@ export default class CartesianAxis extends ReCartesianAxis {
     // The ticks
     ticks: [],
 
-    stroke: '#666',
+    stroke: ThemeManager.getVar('light-gray-2'),
     tickLine: true,
     axisLine: true,
     tick: true,

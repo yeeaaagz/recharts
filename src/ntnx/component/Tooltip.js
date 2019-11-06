@@ -11,8 +11,6 @@ import ReTooltip from '../../component/Tooltip';
 
 const CLS_PREFIX = 'recharts-tooltip-wrapper';
 
-const EPS = 1;
-
 const defaultUniqBy = entry => entry.dataKey;
 const getUniqPaylod = (option, payload) => {
   if (option === true) {
