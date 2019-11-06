@@ -13,7 +13,6 @@ import Label from '../component/Label';
 import { isSsr, PRESENTATION_ATTRIBUTES, EVENT_ATTRIBUTES, getPresentationAttributes,
   filterEventsOfChild } from '../util/ReactUtils';
 import { isNumber, mathSign } from '../util/DataUtils';
-import './CartesianAxis.less';
 
 class CartesianAxis extends Component {
 
@@ -340,7 +339,7 @@ class CartesianAxis extends Component {
         x1: x + needWidth * width,
         y1: y,
         x2: x + needWidth * width,
-        y2: y + height
+        y2: y + height,
       };
     }
 

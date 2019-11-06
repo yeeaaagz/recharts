@@ -18,7 +18,7 @@ import { findAllByType, findChildByType, getDisplayName, parseChildIndex,
   getPresentationAttributes, validateWidthHeight, isChildrenEqual,
   renderByOrder, getReactEventByType, filterEventAttributes } from '../util/ReactUtils';
 
-import CartesianAxis from '../cartesian/CartesianAxis';
+import CartesianAxis from '../ntnx/cartesian/CartesianAxis';
 import Brush from '../cartesian/Brush';
 import { getOffset, calculateChartCoordinate } from '../util/DOMUtils';
 import { getAnyElementOfObject, hasDuplicate, uniqueId, isNumber, findEntryInArray } from '../util/DataUtils';
@@ -488,6 +488,20 @@ const generateCategoricalChart = ({
     }
 
     /**
+     * Return active cell data for each of the graphical items for the current item index
+     * @param {array} formatedGraphicalItems - formatted raphical items
+     * @param {number} activeIndex - index to grab items
+     * @returns {array} new cell data
+     */
+    getActiveCellData(formatedGraphicalItems, activeIndex) {
+      return _.compact(_.map(formatedGraphicalItems, (item) => {
+        if (item.props && item.props.data && item.props.data[activeIndex]) {
+          return item.props.data[activeIndex];
+        }
+      }));
+    }
+
+    /**
      * Get the information of mouse in chart, return null when the mouse is not in the chart
      * @param  {Object} event    The event object
      * @return {Object}          Mouse data
@@ -523,7 +537,7 @@ const generateCategoricalChart = ({
 
         return {
           ...e,
-          activeCellData: this.state.formatedGraphicalItems[0].props.data[activeIndex],
+          activeCellData: this.getActiveCellData(this.state.formatedGraphicalItems, activeIndex),
           activeTooltipIndex: activeIndex,
           activeLabel, activePayload, activeCoordinate,
         };
@@ -549,9 +563,6 @@ const generateCategoricalChart = ({
       // get data by activeIndex when the axis don't allow duplicated category
       return graphicalItems.reduce((result, child) => {
         const { hide } = child.props;
-
-        if (hide) { return result; }
-
         const { dataKey, name, unit, formatter, data, tooltipType } = child.props;
         let payload;
 
@@ -568,6 +579,7 @@ const generateCategoricalChart = ({
           ...getPresentationAttributes(child),
           dataKey, unit, formatter,
           name: name || dataKey,
+          hide,
           color: getMainColorOfGraphicItem(child),
           value: getValueByDataKey(payload, dataKey),
           type: tooltipType,
@@ -603,6 +615,7 @@ const generateCategoricalChart = ({
             [`${entry.axisType}Ticks`]: getTicksOfAxis(axis),
           };
         }, {});
+
         const cateAxis = axisObj[cateAxisName];
         const cateTicks = axisObj[`${cateAxisName}Ticks`];
         const stackedData = stackGroups && stackGroups[numericAxisId] &&
@@ -781,6 +794,7 @@ const generateCategoricalChart = ({
       const stackGroups = getStackGroupsByAxisId(
         data, graphicalItems, `${numericAxisName}Id`, `${cateAxisName}Id`, stackOffset, reverseStackOrder
       );
+
       const axisObj = axisComponents.reduce((result, entry) => {
         const name = `${entry.axisType}Map`;
 
@@ -1325,6 +1339,20 @@ const generateCategoricalChart = ({
     }
 
     /**
+     * Get current graphical items
+     * @param {array} items
+     * @param {number} index
+     * @return {array} of current graphical items
+     */
+    getCurrentGraphicalItems(items, index) {
+      return _.map(items, (item) => {
+        if ( item.props && item.props.data && item.props.data[index]) {
+          return item.props.data[index];
+        }
+      });
+    }
+
+    /**
      * Draw Tooltip
      * @return {ReactElement}  The instance of Tooltip
      */
@@ -1346,7 +1374,7 @@ const generateCategoricalChart = ({
       return cloneElement(tooltipItem, {
         viewBox: { ...offset, x: offset.left, y: offset.top },
         active: isTooltipActive,
-        graphicalItemPayload: activeTooltipIndex > -1 ? this.state.formatedGraphicalItems[0].props.data[activeTooltipIndex] : {},
+        graphicalItemPayload: activeTooltipIndex > -1 ? this.getCurrentGraphicalItems(this.state.formatedGraphicalItems, activeTooltipIndex) : {},
         label: activeLabel,
         payload: isTooltipActive ? activePayload : [],
         // Recharts Bug fix: If not set then let chart define it

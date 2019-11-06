@@ -34,7 +34,8 @@
     "lint": "eslint src",
     "autofix": "eslint src --fix",
     "analyse": "cross-env NODE_ENV=analyse webpack src/index.js -o umd/Recharts.js",
-    "styleguide": "npx styleguidist server"
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build"
   },
   "pre-commit": [],
   "pre-push": [

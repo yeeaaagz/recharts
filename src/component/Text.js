@@ -6,7 +6,6 @@ import _ from 'lodash';
 import { isNumber, isNumOrStr } from '../util/DataUtils';
 import { PRESENTATION_ATTRIBUTES, getPresentationAttributes, isSsr, filterEventAttributes } from '../util/ReactUtils';
 import { getStringSize } from '../util/DOMUtils';
-import './Text.less';
 
 const BREAKING_SPACES = /[ \f\n\r\t\v\u2028\u2029]+/;
 
@@ -169,7 +168,7 @@ class Text extends Component {
         {...filterEventAttributes(textProps)}
         x={x}
         y={y}
-        className={classNames(className, 'recharts-text ntnx')}
+        className={classNames('recharts-text', className)}
         textAnchor={textAnchor}
       >
         {
