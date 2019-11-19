@@ -430,8 +430,6 @@ class Brush extends Component {
     const { data, className, children, x, y, width, height } = this.props;
     const { startX, endX, isTextActive, isSlideMoving, isTravellerMoving } = this.state;
 
-    // console.log('render brush', this.props, this.state);
-
     if (!data || !data.length || !isNumber(x) || !isNumber(y) || !isNumber(width) ||
       !isNumber(height) || width <= 0 || height <= 0) { return null; }
 

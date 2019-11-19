@@ -1,4 +1,4 @@
-Centered
+Centered with No Data and Missing Data Examples
 ```js
 const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const Cell = require('../../component/Cell').default;
@@ -174,7 +174,7 @@ const data = [
 
 class Example extends React.Component {
   constructor(props) {
-    const startValue = 36;
+    const startValue = 12;
 
     this.state = {
       autoPlay: false,
@@ -185,59 +185,48 @@ class Example extends React.Component {
 
     this.onChangeSlider = this.onChangeSlider.bind(this);
     this.onChangeAutoPlay = this.onChangeAutoPlay.bind(this);
-    this.StartTimeOut = this.StartTimeOut.bind(this);
+    this.startTimeOut = this.startTimeOut.bind(this);
     this.handleOnInputNumberChange = this.handleOnInputNumberChange.bind(this);
   }
 
-  StartTimeOut() {
+  startTimeOut() {
     setTimeout(() => {
       if (!this.state.autoPlay) {
         return;
       }
       this.setState((prevState) => {
-
         const newSlideVal = prevState.sliderVal >= data.length ? 1 : prevState.sliderVal + 1;
 
         return {
           data: data.slice(0, newSlideVal),
           sliderVal: newSlideVal
         };
-      }
-      );
-      console.log('update');
-      this.StartTimeOut();
+      });
+      this.startTimeOut();
     },
     this.state.autoPlayIntervalSpeed
     );
   }
 
-    handleOnInputNumberChange(value) {
-      this.setState({
-        autoPlayIntervalSpeed: value
-      });
-    }
+  handleOnInputNumberChange(value) {
+    this.setState({
+      autoPlayIntervalSpeed: value
+    });
+  }
 
   onChangeSlider(value) {
-    this.setState((prevState) => {
-
-      console.log('onChangeSlider', data.slice(0, value));
-
-      return {
-        data: data.slice(0, value),
-        sliderVal: value
-      };
-      
+    this.setState({
+      data: data.slice(0, value),
+      sliderVal: value
     });
   }
 
   onChangeAutoPlay(value) {
     this.setState((prevState) => {
-
       if (!prevState.autoPlay) {
-        this.StartTimeOut();
+        this.startTimeOut();
       }
       
-
       return {
         autoPlay: !prevState.autoPlay
       };
@@ -288,15 +277,14 @@ class Example extends React.Component {
       let width = oWidth;
       let height = Math.abs(oHeight);
 
-
-      console.log('CandyBar', props);
       return (
-        <rect fill={ ThemeManager.getVar('light-gray-1') }
-              mask='url(#mask-stripe)'
-              x={x}
-              y={ !value ? props.background.y : y}
-              width={width}
-              height={ !value ? props.background.height : height} />
+        <rect 
+          fill={ ThemeManager.getVar('light-gray-1') }
+          mask='url(#mask-stripe)'
+          x={x}
+          y={ !value ? props.background.y : y}
+          width={width}
+          height={ !value ? props.background.height : height} />
         );
     };
        
@@ -308,17 +296,12 @@ class Example extends React.Component {
         data={ this.state.data}
       >
         <Tooltip content={ <div /> } />
-
-       <pattern id="pattern-stripe" 
-        width="6" height="8" 
-        patternUnits="userSpaceOnUse"
-        patternTransform="rotate(-45)">
-        <rect width="2" height="8" transform="translate(0,0)" fill="white"></rect>
-      </pattern>
-      <mask id="mask-stripe">
-        <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-stripe)" />
-      </mask>
-
+        <pattern id="pattern-stripe" width="6" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+          <rect width="2" height="8" transform="translate(0,0)" fill="white" />
+        </pattern>
+        <mask id="mask-stripe">
+          <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-stripe)" />
+        </mask>
         <XAxis dataKey="name"  tickLine={false} minTickGap={ 2 } />
         <YAxis
           tickFormatter={(value) => {
@@ -331,10 +314,8 @@ class Example extends React.Component {
           tickLine={false}
           axisLine={false} />
         <Bar errorShape={ CandyBar } dataKey="value">
-         {
+          {
             data.map((entry, index) => { 
-              // console.log('data map', entry, index);
-
               return (
               <Cell key={`cell-${index}`} fill={ ThemeManager.getVar('blue-1') } />
             )})
@@ -345,12 +326,7 @@ class Example extends React.Component {
     );
   }
 
-
-// find min number things to get the corrext index length for brush
-// <Brush hideText={ true } dataKey="name" endIndex={ 8 } travellerWidth={ 0 } />
-  render() {
-
-    
+  render() {  
     const InputLabelSuffix = (
       <FlexLayout alignItems="center" itemSpacing="10px">
         <TextLabel style={ {
@@ -362,15 +338,9 @@ class Example extends React.Component {
       </FlexLayout>
     );
 
-
     return (
       <StackingLayout>
-
-
-
-
         { this.state.sliderVal === 0 ? this.renderNoData() : this.renderBarChart() }
-
         <Title size="h3">Data points</Title>
         <Slider 
           min={ 0 } 

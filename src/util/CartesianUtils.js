@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { getTicksOfScale, parseScale, checkDomainOfScale, getBandSizeOfAxis } from './ChartUtils';
+import { getChartArea } from '../ntnx/util/ChartUtils';
 
 /**
  * Calculate the scale function, position, width, height of axes
@@ -12,8 +13,6 @@ import { getTicksOfScale, parseScale, checkDomainOfScale, getBandSizeOfAxis } fr
  */
 export const formatAxisMap = (props, axisMap, offset, axisType, chartName, getCenterOffset) => {
   const { alignment, data, width, height, layout } = props;
-  // const { height, layout } = props;
-  // const width = 300;
   const ids = Object.keys(axisMap);
   const steps = {
     left: offset.left,
@@ -31,104 +30,24 @@ export const formatAxisMap = (props, axisMap, offset, axisType, chartName, getCe
     const barGap = 20;
     const toleranceRange = [10, 100];
 
-
-    // includes extra white space
-    const getChartArea = (barSize, barGap, numBars) => {
-      return ((barSize + barGap) * numBars);
-    };    
-
+    /**
+     * Get center offset distance from start of x axis
+     * @param  {number} diagramWidth - width of diagram
+     * @param  {number} chartArea - width of chart area
+     * @param  {number} barGap - gap space between bars
+     * @param  {number} offset - offset distance from center of chart
+     * @return {number} offset distance
+     */
     const getCenterOffsetDistance = (diagramWidth, chartArea, barGap, offset) => {
       return getCenterOffset(diagramWidth - offset, (chartArea - barGap));
     };
 
-    const maxBarForDiagram = (diagramWidth, barSize, barSizeList, barGap, totalBars) => {
-      console.log('maxBarForDiagram', diagramWidth, barSize, barSizeList, barGap, totalBars);
-
-      let fittableBars = 0;
-      for (let barCount = 0; barCount < totalBars; barCount++) {
-        const chartArea = getChartArea(barSizeList[0], barGap, barCount);
-        
-
-        if (chartArea <= diagramWidth) {
-          fittableBars++;
-          // console.log('Walking east one barCount', fittableBars, barCount, chartArea, diagramWidth);
-        } else {
-          break;
-        }
-      }
-
-      // console.log('barCount bars that fit', fittableBars);
-
-
-      return fittableBars;
-    };
-
-
-    const isScrollbarNeeded = (fittableBars, totalBars) => {
-      return fittableBars < totalBars;
-    };
-
-    // const getNewBarSize = (props) => {
-    //   console.log('----------------------------');
-    //   console.log('getNewBarSize', props);
-    //   const { 
-    //     initialBarSize, 
-    //     barGap, 
-    //     barSizeList, 
-    //     diagramWidth,
-    //     numBars, 
-    //     offset, 
-    //     toleranceRange 
-    //   } = props;
-
-
-    //   const currentIndex = _.findIndex(barSizeList, (barSize) => { 
-    //     return barSize === initialBarSize; 
-    //   });
-    //   const chartArea = getChartArea(barSize, barGap, numBars);
-    //   const offsetDistance = getCenterOffsetDistance(diagramWidth, chartArea, barGap, offset);
-
-    //   console.log('currentIndex', currentIndex);
-    //   console.log('chartArea', chartArea);
-    //   console.log('offsetDistance', offsetDistance);
-
-
-      
-    //   if (offsetDistance > toleranceRange[1]) {
-    //     // try bigger size
-    //     console.log('get bigger');
-    //     if (barSizeList.length < currentIndex + 1) {
-    //       console.log('cannot go bigger', currentIndex);
-    //     }  else {
-    //       // return getNewBarSize({...props, initialBarSize: barSizeList[currentIndex + 1]});
-    //     }
-    //   } else if (offsetDistance < toleranceRange[0]) {
-    //     // try smaller size
-    //     console.log('get smaller');
-    //     // return getNewBarSize({...props, initialBarSize: barSizeList[currentIndex + -1]});
-    //   } else {
-    //     // this is good
-    //     console.log('this is good');
-    //     // return barSizeList[currentIndex];
-    //   }
-    //   console.log('----------------------------');
-    // };
-
-
-    // const newBarSize = getNewBarSize({
-    //   initialBarSize: barSize, 
-    //   barGap, 
-    //   barSizeList,
-    //   diagramWidth: width,
-    //   numBars: data.length,
-    //   offset: offset.left,
-    //   toleranceRange
-    // });
-
-
-    const getNewBarSize = (props) => {
-      // console.log('----------------------------');
-      // console.log('getNewBarSize', props);
+    /**
+     * Get bars drawing range
+     * @param {object} props - props to define draw range
+     * @return {array} Range of where to draw start and end coordinates for bars and size of bars.
+     */
+    const getBarDrawRange = (props) => {
       const { 
         initialBarSize, 
         barGap, 
@@ -139,137 +58,55 @@ export const formatAxisMap = (props, axisMap, offset, axisType, chartName, getCe
         toleranceRange 
       } = props;
 
-
       let centerRangeStart, centerRangeEnd, newBarSize;
+      // Test the list of bar sizes to find which size fits the maximum bars available.
       _.each(barSizeList, (barSize, index) => {
-        const chartArea = getChartArea(barSize, barGap, numBars);
+        const chartArea = getChartArea(barSize, barGap, numBars) + barGap;
         const offsetDistance = getCenterOffsetDistance(diagramWidth + offset, chartArea, barGap, offset);
 
-
-
-        // offset distance is distance chart area starts from the beginning of x axis
+        // Offset distance is distance chart area starts from the beginning of x-axis. If offset 
+        // distance is within the minimum tolerance range then the bar size test passes. 
         if (offsetDistance > toleranceRange[0]) {
-
-          // find the middle bid where the barWindow fits within the bargraph, then push it to the right based on the offset of the y axis
+          // Get the first center point where to draw the bars, then push it to the right based on 
+          // the offset of the y-axis.
           centerRangeStart = getCenterOffset(diagramWidth, chartArea) + offset;
-          // take the starting point - then add barwindow length
+          // Take the starting point then width of the chart area to find the range end point.
           centerRangeEnd = centerRangeStart + chartArea;
           newBarSize = barSize;
-
-
-
-
-          // console.log('offsetDistance', offsetDistance);
-          // console.log('get bigger', barSize, index, offsetDistance, toleranceRange[1]);
-          // console.log('centerDrawRange', centerRangeStart, centerRangeEnd, barSize);
-          // console.log('sizes', diagramWidth ,chartArea, barSize);
         }
       });
 
-      // min threshold hit
+      // Min threshold hit. Set the bar size to the minimum allowed.
       if (!newBarSize) {
-          console.log('min size hit');
-          // then we find numb of bars that fit within the threshold
-          const chartArea = getChartArea(barSizeList[0], barGap, numBars);
-          const offsetDistance = getCenterOffsetDistance(diagramWidth + offset, chartArea, barGap, offset);
-          // find the middle bid where the barWindow fits within the bargraph, then push it to the right based on the offset of the y axis
-          centerRangeStart = getCenterOffset(diagramWidth, chartArea) + offset;
-          // take the starting point - then add barwindow length
-          centerRangeEnd = centerRangeStart + chartArea;
-          newBarSize = barSizeList[0];
+        const chartArea = getChartArea(barSizeList[0], barGap, numBars) + barGap;
+        centerRangeStart = getCenterOffset(diagramWidth, chartArea) + offset;
+        centerRangeEnd = centerRangeStart + chartArea;
+        newBarSize = barSizeList[0];
       }
 
       return [centerRangeStart, centerRangeEnd, newBarSize];
-
-
-
-
-      // const currentIndex = _.findIndex(barSizeList, (barSize) => { 
-      //   return barSize === initialBarSize; 
-      // });
-      // const chartArea = getChartArea(barSize, barGap, numBars);
-      // const offsetDistance = getCenterOffsetDistance(diagramWidth, chartArea, barGap, offset);
-
-      // console.log('currentIndex', currentIndex);
-      // console.log('chartArea', chartArea);
-      // console.log('offsetDistance', offsetDistance);
-
-
-      
-      // if (offsetDistance > toleranceRange[1]) {
-      //   // try bigger size
-      //   console.log('get bigger');
-      //   if (barSizeList.length < currentIndex + 1) {
-      //     console.log('cannot go bigger', currentIndex);
-      //   }  else {
-      //     // return getNewBarSize({...props, initialBarSize: barSizeList[currentIndex + 1]});
-      //   }
-      // } else if (offsetDistance < toleranceRange[0]) {
-      //   // try smaller size
-      //   console.log('get smaller');
-      //   // return getNewBarSize({...props, initialBarSize: barSizeList[currentIndex + -1]});
-      // } else {
-      //   // this is good
-      //   console.log('this is good');
-      //   // return barSizeList[currentIndex];
-      // }
-      // console.log('----------------------------');
     };
 
-
-    const newBarSize = getNewBarSize({
-      initialBarSize: barSize, 
-      barGap, 
-      barSizeList,
-      diagramWidth: width - offset.left,
-      numBars: axisMap[0].domain.length || data.length, // use axisMap[0].domain.length when there are brush circumstances
-      offset: offset.left,
-      toleranceRange
-    });
-
-    console.log('newBarSize - dimensions', newBarSize);
-    const maxBar = maxBarForDiagram(width - offset.left, barSize, barSizeList, barGap, data.length);
-    const scrollNeeded = isScrollbarNeeded(maxBar, data.length);
-    // console.log('barCount - isScrollbarNeeded', scrollNeeded);
-
-
-    // const barWindow = ((20 + barGap) * data.length) - barGap;
-
-    // Must incldue the extra padding at the end to propery calculate bandSize. actual measurement is done from barWindow - 20px
-    // const barWindow = ((barSize + barGap) * data.length);
-    const barWindow = getChartArea(barSize, barGap, data.length);
-
+  const barDrawRange = getBarDrawRange({
+    initialBarSize: barSize, 
+    barGap, 
+    barSizeList,
+    diagramWidth: width - offset.left,
+    numBars: axisMap[0].domain.length || data.length,
+    offset: offset.left,
+    toleranceRange
+  });
 
   return ids.reduce((result, id) => {
     const axis = axisMap[id];
     const { orientation, domain, padding = {}, mirror, reversed } = axis;
     const offsetKey = `${orientation}${mirror ? 'Mirror' : ''}`;
-
-    // find the middle bid where the barWindow fits within the bargraph, then push it to the right based on the offset of the y axis
-    const centerRangeStart = getCenterOffset(width - offset.left, barWindow) + (padding.left || 0) + offset.left;
-    // take the starting point - then add barwindow length
-    const centerRangeEnd = centerRangeStart + barWindow;
-
-
-
-    // console.log('centerDrawRange', centerRangeStart, centerRangeEnd);
-    // console.log('formatAxisMap', barWindow, centerRangeStart, centerRangeEnd, (centerRangeEnd - centerRangeStart), ((centerRangeEnd - centerRangeStart) / 4 / 2));
-
-
-    // ( (730 - 60) - (160 - 20)) / 2 -- actual distance from x axis boundary
-    // console.log('centerDistanceFromXEdge', getCenterOffset(width - offset.left, (barWindow - barGap)));
-    // console.log('centerDistanceFromXEdge', getCenterOffsetDistance(width, barWindow, barGap, offset.left));
-
     let range, x, y, needSpace;
 
     if (axisType === 'xAxis') {
       range = [
-        // alignment === 'center' ? centerRangeStart : offset.left + (padding.left || 0),
-        // alignment === 'center' ? centerRangeEnd : offset.left + offset.width - (padding.right || 0),
-        alignment === 'center' ? newBarSize[0] : offset.left + (padding.left || 0),
-        alignment === 'center' ? newBarSize[1] : offset.left + offset.width - (padding.right || 0),
-
-
+        alignment === 'center' ? barDrawRange[0] : offset.left + (padding.left || 0),
+        alignment === 'center' ? barDrawRange[1] : offset.left + offset.width - (padding.right || 0),
       ];
     } else if (axisType === 'yAxis') {
       range = layout === 'horizontal' ? [
@@ -313,9 +150,7 @@ export const formatAxisMap = (props, axisMap, offset, axisType, chartName, getCe
     };
 
     finalAxis.bandSize = getBandSizeOfAxis(finalAxis, ticks);
-    finalAxis.barSize = newBarSize[2];
-    finalAxis.isScrollbarNeeded = scrollNeeded;
-    finalAxis.scrollableRange = maxBar;
+    finalAxis.barSize = barDrawRange[2];
 
     if (!axis.hide && axisType === 'xAxis') {
       steps[offsetKey] += (needSpace ? -1 : 1) * finalAxis.height;
