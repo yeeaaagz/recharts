@@ -152,6 +152,8 @@ class CartesianAxis extends Component {
       const content = _.isFunction(tickFormatter) ? tickFormatter(entry.value) : entry.value;
       const size = getStringSize(content)[sizeKey] + unitSize;
 
+
+
       if (i === 0) {
         const gap = sign * (entry.coordinate - sign * size / 2 - start);
         result[i] = entry = {
@@ -197,6 +199,9 @@ class CartesianAxis extends Component {
       let entry = result[i];
       const content = _.isFunction(tickFormatter) ? tickFormatter(entry.value) : entry.value;
       const size = getStringSize(content)[sizeKey] + unitSize;
+
+
+       // console.log('string size', size, content);
 
       if (i === len - 1) {
         const gap = sign * (entry.coordinate + sign * size / 2 - end);
@@ -317,6 +322,9 @@ class CartesianAxis extends Component {
 
   renderAxisLine() {
     const { x, y, width, height, orientation, axisLine, mirror } = this.props;
+
+
+    // console.log('renderAxisLine', x, y, width, height, orientation, axisLine, mirror);
     let props = {
       ...getPresentationAttributes(this.props),
       fill: 'none',
@@ -348,6 +356,8 @@ class CartesianAxis extends Component {
 
   static renderTickItem(option, props, value) {
     let tickItem;
+
+    
 
     if (React.isValidElement(option)) {
       tickItem = React.cloneElement(option, props);

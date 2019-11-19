@@ -82,6 +82,9 @@ class Bar extends Component {
     onAnimationEnd: () => {},
   };
 
+
+
+
   /**
    * Compose the data of each group
    * @param {Object} props Props for the component
@@ -92,17 +95,23 @@ class Bar extends Component {
    * @param {Array} stackedData  The stacked data of a bar item
    * @return{Array} Composed data
    */
-  static getComposedData = ({ props, item, barPosition, bandSize, xAxis, yAxis,
+  static getComposedData = ({ props, item, barPosition, bandSize, getCenterOffset, xAxis, yAxis,
     xAxisTicks, yAxisTicks, stackedData, dataStartIndex, displayedData, offset }) => {
     const pos = findPositionOfBar(barPosition, item);
     if (!pos) { return []; }
 
-    const { layout } = props;
+    // console.log('getComposedData', props, item, barPosition, bandSize, xAxis, yAxis, xAxisTicks, yAxisTicks, stackedData, dataStartIndex, displayedData, offset);
+    const { alignment, layout } = props;
     const { dataKey, children, minPointSize } = item.props;
     const numericAxis = layout === 'horizontal' ? yAxis : xAxis;
     const stackedDomain = stackedData ? numericAxis.scale.domain() : null;
     const baseValue = getBaseValueOfBar({ props, numericAxis });
     const cells = findAllByType(children, Cell);
+
+
+    const barGap = 20;
+    const barWindow = ((20 + barGap) * displayedData.length) - barGap;
+
 
     const rects = displayedData.map((entry, index) => {
       let value, x, y, width, height, background;
@@ -119,10 +128,12 @@ class Bar extends Component {
 
       if (layout === 'horizontal') {
         x = getCateCoordinateOfBar({
+          alignment,
           axis: xAxis,
           ticks: xAxisTicks,
           bandSize,
-          offset: pos.offset,
+          // offset: alignment === 'center' ? getCenterOffset(props.width - offset.left, barWindow) : pos.offset,
+          offset: alignment === 'center' ? pos.offset : pos.offset,
           entry,
           index,
         });
@@ -138,6 +149,9 @@ class Bar extends Component {
           y -= delta;
           height += delta;
         }
+
+        console.log('bar dims', x, y, height, width);
+
       } else {
         x = xAxis.scale(value[0]);
         y = getCateCoordinateOfBar({
@@ -172,6 +186,11 @@ class Bar extends Component {
   };
 
   state = { isAnimationFinished: false };
+
+
+
+
+
 
   componentWillReceiveProps(nextProps) {
     const { animationId, data } = this.props;
@@ -212,11 +231,34 @@ class Bar extends Component {
   }
 
   renderRectanglesStatically(data) {
-    const { shape } = this.props;
-    const baseProps = getPresentationAttributes(this.props);
+    const { errorShape, shape } = this.props;
 
+
+
+    const values = _.map(data, (item) => {
+      return item && item.value;
+    });
+   // const highestVal =  _.compact(...values);
+    // used to determine error drawn shape
+    const highestVal = Math.max(..._.compact(values));
+
+
+    console.log('renderRectanglesStatically', this.props, highestVal);
+
+
+    const baseProps = getPresentationAttributes(this.props);
+    // console.log('renderRectanglesStatically', this.props);
     return data && data.map((entry, i) => {
       const props = { ...baseProps, ...entry, index: i };
+
+      // console.log('renderRectanglesStatically - map', entry, i);
+
+      let barShape = shape;
+      let newProps = {...props};
+      if (_.isUndefined(entry.value) && errorShape) {
+        barShape = errorShape;
+        newProps.value = highestVal;
+      }
 
       return (
         <Layer
@@ -224,7 +266,7 @@ class Bar extends Component {
           {...filterEventsOfChild(this.props, entry, i)}
           key={`rectangle-${i}`}
         >
-          {this.constructor.renderRectangle(shape, props)}
+          {this.constructor.renderRectangle(barShape, props)}
         </Layer>
       );
     });

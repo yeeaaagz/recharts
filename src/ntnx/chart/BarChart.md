@@ -1,3 +1,517 @@
+Centered
+```js
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
+const Cell = require('../../component/Cell').default;
+const isNull = require('lodash').isNull;
+const isUndefined = require('lodash').isUndefined;
+const Bar = require('../cartesian/Bar').default;
+const Brush = require('../cartesian/Brush').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Legend = require('../../component/Legend').default;
+const Tooltip = require('../component/Tooltip').default;
+
+import {
+  Button,
+  ContainerLayout,
+  InputNumber,
+  FlexLayout,
+  RestartIcon,
+  SuspendIcon,
+  Slider,
+  StackingLayout,
+  TextLabel,
+  Title,
+  ThemeManager,
+  Tooltip as RTooltip
+} from 'prism-reactjs';
+
+const data = [
+  {
+    "name": "Jan",
+    "value": 45000
+  },
+  {
+    "name": "Feb",
+    "value": 90000
+  },
+  {
+    "name": "Mar",
+    "value": 0
+  },
+  {
+    "name": "Apr",
+    "value": 70000
+  },
+  {
+    "name": "May",
+    "value": 70000
+  },
+  {
+    "name": "Jun",
+    "value": 45000
+  },
+  {
+    "name": "Jul",
+    "value": 45000
+  },
+  {
+    "name": "Aug",
+    "value": 90000
+  },
+  {
+    "name": "Sep",
+    "value": 90000
+  },
+  {
+    "name": "Oct"
+  },
+  {
+    "name": "Nov",
+    "value": 70000
+  },
+  {
+    "name": "Dec",
+    "value": 45000
+  },
+  {
+    "name": "Jan",
+    "value": 45000
+  },
+  {
+    "name": "Feb",
+    "value": 90000
+  },
+  {
+    "name": "Mar",
+    "value": 90000
+  },
+  {
+    "name": "Apr",
+    "value": 70000
+  },
+  {
+    "name": "May",
+    "value": 70000
+  },
+  {
+    "name": "Jun",
+    "value": 45000
+  },
+  {
+    "name": "Jul",
+    "value": 45000
+  },
+  {
+    "name": "Aug",
+    "value": 90000
+  },
+  {
+    "name": "Sep",
+    "value": 90000
+  },
+  {
+    "name": "Oct",
+    "value": 70000
+  },
+  {
+    "name": "Nov",
+    "value": 70000
+  },
+  {
+    "name": "Dec",
+    "value": 45000
+  },
+  {
+    "name": "Jan",
+    "value": 45000
+  },
+  {
+    "name": "Feb",
+    "value": 90000
+  },
+  {
+    "name": "Mar",
+    "value": 90000
+  },
+  {
+    "name": "Apr",
+    "value": 70000
+  },
+  {
+    "name": "May",
+    "value": 70000
+  },
+  {
+    "name": "Jun",
+    "value": 45000
+  },
+  {
+    "name": "Jul",
+    "value": 45000
+  },
+  {
+    "name": "Aug",
+    "value": 90000
+  },
+  {
+    "name": "Sep",
+    "value": 90000
+  },
+  {
+    "name": "Oct",
+    "value": 70000
+  },
+  {
+    "name": "Nov",
+    "value": 70000
+  },
+  {
+    "name": "Dec",
+    "value": 45000
+  }
+];
+
+class Example extends React.Component {
+  constructor(props) {
+    const startValue = 36;
+
+    this.state = {
+      autoPlay: false,
+      autoPlayIntervalSpeed: 1000,
+      data: data.slice(0, startValue),
+      sliderVal: startValue
+    };
+
+    this.onChangeSlider = this.onChangeSlider.bind(this);
+    this.onChangeAutoPlay = this.onChangeAutoPlay.bind(this);
+    this.StartTimeOut = this.StartTimeOut.bind(this);
+    this.handleOnInputNumberChange = this.handleOnInputNumberChange.bind(this);
+  }
+
+  StartTimeOut() {
+    setTimeout(() => {
+      if (!this.state.autoPlay) {
+        return;
+      }
+      this.setState((prevState) => {
+
+        const newSlideVal = prevState.sliderVal >= data.length ? 1 : prevState.sliderVal + 1;
+
+        return {
+          data: data.slice(0, newSlideVal),
+          sliderVal: newSlideVal
+        };
+      }
+      );
+      console.log('update');
+      this.StartTimeOut();
+    },
+    this.state.autoPlayIntervalSpeed
+    );
+  }
+
+    handleOnInputNumberChange(value) {
+      this.setState({
+        autoPlayIntervalSpeed: value
+      });
+    }
+
+  onChangeSlider(value) {
+    this.setState((prevState) => {
+
+      console.log('onChangeSlider', data.slice(0, value));
+
+      return {
+        data: data.slice(0, value),
+        sliderVal: value
+      };
+      
+    });
+  }
+
+  onChangeAutoPlay(value) {
+    this.setState((prevState) => {
+
+      if (!prevState.autoPlay) {
+        this.StartTimeOut();
+      }
+      
+
+      return {
+        autoPlay: !prevState.autoPlay
+      };
+    });
+  }
+
+  renderAutoPlayBtn() {
+    if (this.state.autoPlay) {
+      return (
+        <RTooltip content="Stop Auto Play">
+          <Button  onClick={ this.onChangeAutoPlay }type="destructive"><SuspendIcon /></Button>
+        </RTooltip>
+      );
+    } 
+
+    return (
+      <RTooltip content="Auto Play">
+        <Button onClick={ this.onChangeAutoPlay }><RestartIcon /></Button>
+      </RTooltip>
+    );
+  }
+
+  renderNoData() {
+    return (
+      <ContainerLayout style={{width: '730px', height: '250px'}} backgroundColor="white" border={ true }>
+        <FlexLayout style={{height: '100%'}} justifyContent="center" alignItems="center">
+          <TextLabel style={{fontSize: '40px'}}>
+            No Data
+          </TextLabel>
+        </FlexLayout>
+      </ContainerLayout>
+    );
+  }
+
+  renderBarChart() {
+    const CandyBar = (props) => {
+      const {     
+        x: oX,
+        y: oY,
+        width: oWidth,
+        height: oHeight,
+        value,
+        fill
+      } = props;
+      
+      let x = oX;
+      let y = oHeight < 0 ? oY + oHeight : oY;
+      let width = oWidth;
+      let height = Math.abs(oHeight);
+
+
+      console.log('CandyBar', props);
+      return (
+        <rect fill={ ThemeManager.getVar('light-gray-1') }
+              mask='url(#mask-stripe)'
+              x={x}
+              y={ !value ? props.background.y : y}
+              width={width}
+              height={ !value ? props.background.height : height} />
+        );
+    };
+       
+    return (
+      <BarChart
+        alignment="center"
+        width={730}
+        height={250}
+        data={ this.state.data}
+      >
+        <Tooltip content={ <div /> } />
+
+       <pattern id="pattern-stripe" 
+        width="6" height="8" 
+        patternUnits="userSpaceOnUse"
+        patternTransform="rotate(-45)">
+        <rect width="2" height="8" transform="translate(0,0)" fill="white"></rect>
+      </pattern>
+      <mask id="mask-stripe">
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-stripe)" />
+      </mask>
+
+        <XAxis dataKey="name"  tickLine={false} minTickGap={ 2 } />
+        <YAxis
+          tickFormatter={(value) => {
+            if (value === 0) {
+              return value;
+            }
+
+            return `${value / 1000}k`;
+          }}
+          tickLine={false}
+          axisLine={false} />
+        <Bar errorShape={ CandyBar } dataKey="value">
+         {
+            data.map((entry, index) => { 
+              // console.log('data map', entry, index);
+
+              return (
+              <Cell key={`cell-${index}`} fill={ ThemeManager.getVar('blue-1') } />
+            )})
+          }
+        </Bar>
+        <Brush hideText={ true } dataKey="name" travellerWidth={ 0 } />
+      </BarChart>
+    );
+  }
+
+
+// find min number things to get the corrext index length for brush
+// <Brush hideText={ true } dataKey="name" endIndex={ 8 } travellerWidth={ 0 } />
+  render() {
+
+    
+    const InputLabelSuffix = (
+      <FlexLayout alignItems="center" itemSpacing="10px">
+        <TextLabel style={ {
+          borderLeft: '1px solid #b8bfca',
+          padding: '5px 0px 5px 10px'
+        } }>
+          ms
+        </TextLabel>
+      </FlexLayout>
+    );
+
+
+    return (
+      <StackingLayout>
+
+
+
+
+        { this.state.sliderVal === 0 ? this.renderNoData() : this.renderBarChart() }
+
+        <Title size="h3">Data points</Title>
+        <Slider 
+          min={ 0 } 
+          max={ data.length } 
+          value={ this.state.sliderVal }
+          onChange={ this.onChangeSlider } 
+          step={ 1 }
+        />
+        <StackingLayout itemSpacing="0px">
+          <TextLabel size={ TextLabel.TEXT_LABEL_SIZE.SMALL } type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>
+          Autoplay and Interval Speed
+          </TextLabel>
+          <FlexLayout alignItems="center">
+            { this.renderAutoPlayBtn() }
+            <InputNumber
+              style={ { width: 80 } }
+              step={ 1 } 
+              onValueChange={ this.handleOnInputNumberChange } 
+              value={ this.state.autoPlayIntervalSpeed }
+              suffix={ InputLabelSuffix }
+          />
+          </FlexLayout>
+          </StackingLayout>
+      </StackingLayout>
+    );
+  }
+}
+
+<Example />
+```
+
+Color Palette
+```js
+const ColorPalette = require('../../../styleguide/components/ColorPalette/ColorPalette').default;
+
+<ColorPalette />
+```
+
+Horizontal
+```js
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
+const isNull = require('lodash').isNull;
+const Bar = require('../cartesian/Bar').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Legend = require('../../component/Legend').default;
+const ThemeManager = require('prism-reactjs').ThemeManager;
+
+const data = [
+  {
+    "name": "March",
+    "marValue": 45000
+  },
+  {
+    "name": "April",
+    "aprValue": 90000
+  },
+  {
+    "name": "May",
+    "mayValue": 90000
+  },
+  {
+    "name": "June",
+    "junValue": 70000
+  },
+  {
+    "name": "July",
+    "julValue": 70000
+  },
+  {
+    "name": "August",
+    "augValue": 45000
+  }
+];
+
+class Example extends React.Component {
+
+  getBarFillColor(bar) {
+    switch(bar) {
+      case 'marValue':
+        return '#6143d8';
+      case 'aprValue':
+        return '#486ae4';
+      case 'mayValue':
+        return '#2f91f1';
+      case 'junValue':
+        return '#39afee';
+      case 'julValue':
+        return '#65c2db';
+      case 'augValue':
+        return '#92d7c9';
+    }
+  }
+
+  renderBars() {
+    const bars = ['marValue', 'aprValue', 'mayValue', 'junValue', 'julValue', 'augValue'];
+
+    return bars.map(bar => { 
+      return (
+        <Bar 
+          stackId="a" 
+          dataKey={ bar } 
+          fill={ this.getBarFillColor(bar) }
+        />
+      );
+    });
+  }
+
+  render() {
+    return (
+      <BarChart layout="vertical"
+        width={730}
+        height={250}
+        data={data}
+      >
+          <XAxis 
+            type="number"
+            tickFormatter={(value) => {
+              if (value === 0) {
+                return value;
+              }
+
+              return `${value / 1000}k`;
+            }}
+            tickLine={false}
+          />
+          <YAxis 
+            dataKey="name" 
+            type="category"
+            axisLine={ false } 
+            tickLine={false} 
+          />
+        { this.renderBars() }
+      </BarChart>
+    );
+  }
+}
+
+<Example />
+```
+
 Brushing
 ```js
 const CartesianGrid = require('../cartesian/CartesianGrid').default;
