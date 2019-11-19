@@ -1,12 +1,12 @@
 A container component to make charts adapt to the size of parent container. One of the props width and height should be a percentage string.
 ```js
-const Area = require('../cartesian/Area').default;
-const AreaChart = require('../chart/AreaChart').default;
-const XAxis = require('../cartesian/XAxis').default;
-const YAxis = require('../cartesian/YAxis').default;
+const Area = require('../../cartesian/Area').default;
+const AreaChart = require('../../chart/AreaChart').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
 const CartesianGrid = require('../cartesian/CartesianGrid').default;
-const Tooltip = require('../component/Tooltip').default;
-const ReferenceLine = require('../cartesian/ReferenceLine').default;
+const Tooltip = require('../../component/Tooltip').default;
+const ReferenceLine = require('../../cartesian/ReferenceLine').default;
 
 const data = [
   {

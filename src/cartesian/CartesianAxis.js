@@ -13,7 +13,6 @@ import Label from '../component/Label';
 import { isSsr, PRESENTATION_ATTRIBUTES, EVENT_ATTRIBUTES, getPresentationAttributes,
   filterEventsOfChild } from '../util/ReactUtils';
 import { isNumber, mathSign } from '../util/DataUtils';
-import './CartesianAxis.less';
 
 class CartesianAxis extends Component {
 
@@ -22,97 +21,33 @@ class CartesianAxis extends Component {
   static propTypes = {
     ...PRESENTATION_ATTRIBUTES,
     ...EVENT_ATTRIBUTES,
-    /**
-     * Class name.
-     */
     className: PropTypes.string,
-    /**
-     * If set a string or a number, default label will be drawn, and the option is content. If set a React element, the option is the custom react element of drawing label. If set a function, the function will be called to render customized label.
-     */
-    label: PropTypes.oneOf([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.element,
-      PropTypes.func
-    ]),
-    /**
-     * The x-coordinate of axis.
-     */
     x: PropTypes.number,
-    /**
-     * The y-coordinate of axis.
-     */
     y: PropTypes.number,
-    /**
-     * The width of axis.
-     */
     width: PropTypes.number,
-    /**
-     * The height of axis.
-     */
     height: PropTypes.number,
-    /**
-     * The orientation of axis.
-     */
     orientation: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
-    /**
-     * The box of viewing area.
-     */
+    // The viewBox of svg
     viewBox: PropTypes.shape({
       x: PropTypes.number,
       y: PropTypes.number,
       width: PropTypes.number,
       height: PropTypes.number,
     }),
-    /**
-     * If set false, no ticks will be drawn. If set a object, the option is the configuration of ticks. If set a React element, the option is the custom react element of drawing ticks. If set a function, the function will be called to render customized tick.
-     */
     tick: PropTypes.oneOfType([
       PropTypes.bool, PropTypes.func, PropTypes.object, PropTypes.element,
     ]),
-    /**
-     * If set false, no axis line will be drawn. If set a object, the option is the configuration of axis line.
-     */
     axisLine: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
-    /**
-     * If set false, no axis tick lines will be drawn. If set a object, the option is the configuration of tick lines.
-     */
     tickLine: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
-    /**
-     * If set true, flips ticks around the axis line, displaying the labels inside the chart instead of outside.
-     */
     mirror: PropTypes.bool,
-    /**
-     * The margin between tick line and tick.
-     */
     tickMargin: PropTypes.number.isRequired,
-    /**
-     * The minimum gap between two adjacent labels.
-     */
+
     minTickGap: PropTypes.number,
-    /**
-     * Ticks.
-     */
     ticks: PropTypes.array,
-    /**
-     * The length of tick line.
-     */
     tickSize: PropTypes.number,
-    /**
-     * Stroke.
-     */
     stroke: PropTypes.string,
-    /**
-     * Tick Formatter.
-     */
     tickFormatter: PropTypes.func,
-    /**
-     * Ticks Generator.
-     */
     ticksGenerator: PropTypes.func,
-    /**
-     * If set 0, all the ticks will be shown. If set preserveStart", "preserveEnd" or "preserveStartEnd", the ticks which is to be shown or hidden will be calculated automatically.
-     */
     interval: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([
       'preserveStart', 'preserveEnd', 'preserveStartEnd',
     ])]),
@@ -217,6 +152,8 @@ class CartesianAxis extends Component {
       const content = _.isFunction(tickFormatter) ? tickFormatter(entry.value) : entry.value;
       const size = getStringSize(content)[sizeKey] + unitSize;
 
+
+
       if (i === 0) {
         const gap = sign * (entry.coordinate - sign * size / 2 - start);
         result[i] = entry = {
@@ -262,6 +199,9 @@ class CartesianAxis extends Component {
       let entry = result[i];
       const content = _.isFunction(tickFormatter) ? tickFormatter(entry.value) : entry.value;
       const size = getStringSize(content)[sizeKey] + unitSize;
+
+
+       // console.log('string size', size, content);
 
       if (i === len - 1) {
         const gap = sign * (entry.coordinate + sign * size / 2 - end);
@@ -382,6 +322,9 @@ class CartesianAxis extends Component {
 
   renderAxisLine() {
     const { x, y, width, height, orientation, axisLine, mirror } = this.props;
+
+
+    // console.log('renderAxisLine', x, y, width, height, orientation, axisLine, mirror);
     let props = {
       ...getPresentationAttributes(this.props),
       fill: 'none',
@@ -404,22 +347,17 @@ class CartesianAxis extends Component {
         x1: x + needWidth * width,
         y1: y,
         x2: x + needWidth * width,
-        y2: y + height
+        y2: y + height,
       };
     }
 
     return <line className="recharts-cartesian-axis-line" {...props} />;
   }
 
-  isTickActive(tickLabel) {
-    const { activeLabel } = this.props;
-
-    return tickLabel === activeLabel;
-
-  }
-
   static renderTickItem(option, props, value) {
     let tickItem;
+
+    
 
     if (React.isValidElement(option)) {
       tickItem = React.cloneElement(option, props);
@@ -457,7 +395,6 @@ class CartesianAxis extends Component {
     const items = finalTicks.map((entry, i) => {
       const { line: lineCoord, tick: tickCoord } = this.getTickLineCoord(entry);
       const tickProps = {
-        active: this.isTickActive(entry.value),
         textAnchor,
         verticalAnchor,
         ...axisProps,
@@ -467,8 +404,6 @@ class CartesianAxis extends Component {
         index: i, payload: entry,
         visibleTicksCount: finalTicks.length,
       };
-
-      console.log('renderTicks', tickProps);
 
       return (
         <Layer
@@ -501,8 +436,6 @@ class CartesianAxis extends Component {
 
   render() {
     const { axisLine, width, height, ticksGenerator, className, hide } = this.props;
-
-    console.log('render axis', this.props);
 
     if (hide) { return null; }
 

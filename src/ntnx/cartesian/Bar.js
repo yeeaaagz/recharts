@@ -2,11 +2,18 @@ import PropTypes from 'prop-types';
 import ReBar from '../../cartesian/Bar';
 import { LEGEND_TYPES, TOOLTIP_TYPES, isSsr } from '../../util/ReactUtils';
 
-class Bar extends ReBar {
+/**
+ * @component
+ */
+export default class Bar extends ReBar {
 
   static propTypes = {
     /**
-     * If false set, background of bars will not be drawn. If true set, background of bars will be drawn which have the props calculated internally. If object set, background of bars will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom background element. If set a function, the function will be called to render customized background.
+     * If false set, background of bars will not be drawn. If true set, background of bars will be 
+     * drawn which have the props calculated internally. If object set, background of bars will be 
+     * drawn which have the props mergered by the internal calculated props and the option. If 
+     * ReactElement set, the option can be the custom background element. If set a function, the 
+     * function will be called to render customized background.
      */
     background: PropTypes.oneOf([
       PropTypes.bool,
@@ -26,7 +33,11 @@ class Bar extends ReBar {
       PropTypes.number
     ]),
     /**
-     * If false set, labels will not be drawn. If true set, labels will be drawn which have the props calculated internally. If object set, labels will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom label element. If set a function, the function will be called to render customized label.
+     * If false set, labels will not be drawn. If true set, labels will be drawn which have the 
+     * props calculated internally. If object set, labels will be drawn which have the props 
+     * mergered by the internal calculated props and the option. If ReactElement set, the option 
+     * can be the custom label element. If set a function, the function will be called to render 
+     * customized label.
      */
     label: PropTypes.oneOf([
       PropTypes.string,
@@ -87,11 +98,13 @@ class Bar extends ReBar {
      */
     xAxis: PropTypes.object,
     /**
-     * The stack id of bar, when two bars have the same value axis and same stackId, then the two bars are stacked in order.
+     * The stack id of bar, when two bars have the same value axis and same stackId, then the two 
+     * bars are stacked in order.
      */
     stackId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /**
-     * The width or height of each bar. If the barSize is not specified, the size of bar will be caculated by the barCategoryGap, barGap and the quantity of bar groups.
+     * The width or height of each bar. If the barSize is not specified, the size of bar will be 
+     * caculated by the barCategoryGap, barGap and the quantity of bar groups.
      */
     barSize: PropTypes.number,
     /**
@@ -99,7 +112,8 @@ class Bar extends ReBar {
      */
     unit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /**
-     * The name of data. This option will be used in tooltip and legend to represent a bar. If no value was set to this option, the value of dataKey will be used alternatively.
+     * The name of data. This option will be used in tooltip and legend to represent a bar. If no 
+     * value was set to this option, the value of dataKey will be used alternatively.
      */
     name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /**
@@ -115,7 +129,11 @@ class Bar extends ReBar {
      */
     tooltipType: PropTypes.oneOf(TOOLTIP_TYPES),
     /**
-     * The minimal height of a bar in a horizontal BarChart, or the minimal width of a bar in a vertical BarChart. By default, 0 values are not shown. To visualize a 0 (or close to zero) point, set the minimal point size to a pixel value like 3. In stacked bar charts, minPointSize might not be respected for tightly packed values. So we strongly recommend not using this props in stacked BarChart.
+     * The minimal height of a bar in a horizontal BarChart, or the minimal width of a bar in a 
+     * vertical BarChart. By default, 0 values are not shown. To visualize a 0 (or close to zero) 
+     * point, set the minimal point size to a pixel value like 3. In stacked bar charts, 
+     * minPointSize might not be respected for tightly packed values. So we strongly recommend not 
+     * using this props in stacked BarChart.
      */
     minPointSize: PropTypes.number,
     /**
@@ -127,7 +145,8 @@ class Bar extends ReBar {
      */
     hide: PropTypes.bool,
     /**
-     * If set a ReactElement, the shape of bar can be customized. If set a function, the function will be called to render customized shape.
+     * If set a ReactElement, the shape of bar can be customized. If set a function, the function 
+     * will be called to render customized shape.
      */
     shape: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
     /**
@@ -170,7 +189,8 @@ class Bar extends ReBar {
      */
     animationEasing: PropTypes.oneOf(['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear']),
     /**
-     * The unique id of this component, which will be used to generate unique clip path id internally. This props is suggested to be set in SSR.
+     * The unique id of this component, which will be used to generate unique clip path id 
+     * internally. This props is suggested to be set in SSR.
      */
     id: PropTypes.string,
   };
@@ -193,5 +213,3 @@ class Bar extends ReBar {
     onAnimationEnd: () => {},
   };
 }
-
-export default Bar;

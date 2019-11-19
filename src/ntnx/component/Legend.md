@@ -39,12 +39,12 @@ const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const isEmpty = require('lodash').isEmpty;
 const Bar = require('../cartesian/Bar').default;
-const ResponsiveContainer = require('../component/ResponsiveContainer').default;
-const XAxis = require('../cartesian/XAxis').default;
-const YAxis = require('../cartesian/YAxis').default;
-const Tooltip = require('../component/Tooltip').default;
-const LineChart = require('../chart/LineChart').default;
-const Line = require('../cartesian/Line').default;
+const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../../component/Tooltip').default;
+const LineChart = require('../../chart/LineChart').default;
+const Line = require('../../cartesian/Line').default;
 
 const data = [
       {name: 'Page A', uv: 4000, pv: 2400, amt: 2400},
@@ -90,12 +90,12 @@ const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const isEmpty = require('lodash').isEmpty;
 const Bar = require('../cartesian/Bar').default;
-const ResponsiveContainer = require('../component/ResponsiveContainer').default;
-const XAxis = require('../cartesian/XAxis').default;
-const YAxis = require('../cartesian/YAxis').default;
-const Tooltip = require('../component/Tooltip').default;
-const LineChart = require('../chart/LineChart').default;
-const Line = require('../cartesian/Line').default;
+const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../../component/Tooltip').default;
+const LineChart = require('../../chart/LineChart').default;
+const Line = require('../../cartesian/Line').default;
 
 const data = [
   {

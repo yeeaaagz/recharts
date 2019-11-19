@@ -30,8 +30,8 @@ Content: CustomContentOfTooltip
 ```js
 const BarChart = require('../chart/BarChart').default;
 const CartesianGrid = require('../cartesian/CartesianGrid').default;
-const XAxis = require('../cartesian/XAxis').default;
-const YAxis = require('../cartesian/YAxis').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
 const Legend = require('./Legend').default;
 const Bar = require('../cartesian/Bar').default;
 const data = [

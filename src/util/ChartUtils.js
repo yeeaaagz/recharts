@@ -235,6 +235,7 @@ export const getBarSizeList = ({ barSize: globalSize, stackGroups = {} }) => {
    * @return {Number} The size of each bar and the gap between two bars
    */
 export const getBarPosition = ({ barGap, barCategoryGap, bandSize, sizeList = [], maxBarSize }) => {
+  console.log('getBarPosition', barGap, barCategoryGap, bandSize, sizeList, maxBarSize);
   const len = sizeList.length;
   if (len < 1) return null;
 
@@ -988,6 +989,10 @@ export const parseSpecifiedDomain = (specifiedDomain, dataDomain, allowDataOverf
  * @return {Number} Size
  */
 export const getBandSizeOfAxis = (axis, ticks) => {
+
+  console.log('getBandSizeOfAxis', axis, ticks);
+
+
   if (axis && axis.scale && axis.scale.bandwidth) {
     return axis.scale.bandwidth();
   }
@@ -1002,6 +1007,8 @@ export const getBandSizeOfAxis = (axis, ticks) => {
 
       bandSize = Math.min((cur.coordinate || 0) - (prev.coordinate || 0), bandSize);
     }
+
+
 
     return bandSize === Infinity ? 0 : bandSize;
   }

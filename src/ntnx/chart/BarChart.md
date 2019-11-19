@@ -1,7 +1,521 @@
+Centered
+```js
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
+const Cell = require('../../component/Cell').default;
+const isNull = require('lodash').isNull;
+const isUndefined = require('lodash').isUndefined;
+const Bar = require('../cartesian/Bar').default;
+const Brush = require('../cartesian/Brush').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Legend = require('../../component/Legend').default;
+const Tooltip = require('../component/Tooltip').default;
+
+import {
+  Button,
+  ContainerLayout,
+  InputNumber,
+  FlexLayout,
+  RestartIcon,
+  SuspendIcon,
+  Slider,
+  StackingLayout,
+  TextLabel,
+  Title,
+  ThemeManager,
+  Tooltip as RTooltip
+} from 'prism-reactjs';
+
+const data = [
+  {
+    "name": "Jan",
+    "value": 45000
+  },
+  {
+    "name": "Feb",
+    "value": 90000
+  },
+  {
+    "name": "Mar",
+    "value": 0
+  },
+  {
+    "name": "Apr",
+    "value": 70000
+  },
+  {
+    "name": "May",
+    "value": 70000
+  },
+  {
+    "name": "Jun",
+    "value": 45000
+  },
+  {
+    "name": "Jul",
+    "value": 45000
+  },
+  {
+    "name": "Aug",
+    "value": 90000
+  },
+  {
+    "name": "Sep",
+    "value": 90000
+  },
+  {
+    "name": "Oct"
+  },
+  {
+    "name": "Nov",
+    "value": 70000
+  },
+  {
+    "name": "Dec",
+    "value": 45000
+  },
+  {
+    "name": "Jan",
+    "value": 45000
+  },
+  {
+    "name": "Feb",
+    "value": 90000
+  },
+  {
+    "name": "Mar",
+    "value": 90000
+  },
+  {
+    "name": "Apr",
+    "value": 70000
+  },
+  {
+    "name": "May",
+    "value": 70000
+  },
+  {
+    "name": "Jun",
+    "value": 45000
+  },
+  {
+    "name": "Jul",
+    "value": 45000
+  },
+  {
+    "name": "Aug",
+    "value": 90000
+  },
+  {
+    "name": "Sep",
+    "value": 90000
+  },
+  {
+    "name": "Oct",
+    "value": 70000
+  },
+  {
+    "name": "Nov",
+    "value": 70000
+  },
+  {
+    "name": "Dec",
+    "value": 45000
+  },
+  {
+    "name": "Jan",
+    "value": 45000
+  },
+  {
+    "name": "Feb",
+    "value": 90000
+  },
+  {
+    "name": "Mar",
+    "value": 90000
+  },
+  {
+    "name": "Apr",
+    "value": 70000
+  },
+  {
+    "name": "May",
+    "value": 70000
+  },
+  {
+    "name": "Jun",
+    "value": 45000
+  },
+  {
+    "name": "Jul",
+    "value": 45000
+  },
+  {
+    "name": "Aug",
+    "value": 90000
+  },
+  {
+    "name": "Sep",
+    "value": 90000
+  },
+  {
+    "name": "Oct",
+    "value": 70000
+  },
+  {
+    "name": "Nov",
+    "value": 70000
+  },
+  {
+    "name": "Dec",
+    "value": 45000
+  }
+];
+
+class Example extends React.Component {
+  constructor(props) {
+    const startValue = 36;
+
+    this.state = {
+      autoPlay: false,
+      autoPlayIntervalSpeed: 1000,
+      data: data.slice(0, startValue),
+      sliderVal: startValue
+    };
+
+    this.onChangeSlider = this.onChangeSlider.bind(this);
+    this.onChangeAutoPlay = this.onChangeAutoPlay.bind(this);
+    this.StartTimeOut = this.StartTimeOut.bind(this);
+    this.handleOnInputNumberChange = this.handleOnInputNumberChange.bind(this);
+  }
+
+  StartTimeOut() {
+    setTimeout(() => {
+      if (!this.state.autoPlay) {
+        return;
+      }
+      this.setState((prevState) => {
+
+        const newSlideVal = prevState.sliderVal >= data.length ? 1 : prevState.sliderVal + 1;
+
+        return {
+          data: data.slice(0, newSlideVal),
+          sliderVal: newSlideVal
+        };
+      }
+      );
+      console.log('update');
+      this.StartTimeOut();
+    },
+    this.state.autoPlayIntervalSpeed
+    );
+  }
+
+    handleOnInputNumberChange(value) {
+      this.setState({
+        autoPlayIntervalSpeed: value
+      });
+    }
+
+  onChangeSlider(value) {
+    this.setState((prevState) => {
+
+      console.log('onChangeSlider', data.slice(0, value));
+
+      return {
+        data: data.slice(0, value),
+        sliderVal: value
+      };
+      
+    });
+  }
+
+  onChangeAutoPlay(value) {
+    this.setState((prevState) => {
+
+      if (!prevState.autoPlay) {
+        this.StartTimeOut();
+      }
+      
+
+      return {
+        autoPlay: !prevState.autoPlay
+      };
+    });
+  }
+
+  renderAutoPlayBtn() {
+    if (this.state.autoPlay) {
+      return (
+        <RTooltip content="Stop Auto Play">
+          <Button  onClick={ this.onChangeAutoPlay }type="destructive"><SuspendIcon /></Button>
+        </RTooltip>
+      );
+    } 
+
+    return (
+      <RTooltip content="Auto Play">
+        <Button onClick={ this.onChangeAutoPlay }><RestartIcon /></Button>
+      </RTooltip>
+    );
+  }
+
+  renderNoData() {
+    return (
+      <ContainerLayout style={{width: '730px', height: '250px'}} backgroundColor="white" border={ true }>
+        <FlexLayout style={{height: '100%'}} justifyContent="center" alignItems="center">
+          <TextLabel style={{fontSize: '40px'}}>
+            No Data
+          </TextLabel>
+        </FlexLayout>
+      </ContainerLayout>
+    );
+  }
+
+  renderBarChart() {
+    const CandyBar = (props) => {
+      const {     
+        x: oX,
+        y: oY,
+        width: oWidth,
+        height: oHeight,
+        value,
+        fill
+      } = props;
+      
+      let x = oX;
+      let y = oHeight < 0 ? oY + oHeight : oY;
+      let width = oWidth;
+      let height = Math.abs(oHeight);
+
+
+      console.log('CandyBar', props);
+      return (
+        <rect fill={ ThemeManager.getVar('light-gray-1') }
+              mask='url(#mask-stripe)'
+              x={x}
+              y={ !value ? props.background.y : y}
+              width={width}
+              height={ !value ? props.background.height : height} />
+        );
+    };
+       
+    return (
+      <BarChart
+        alignment="center"
+        width={730}
+        height={250}
+        data={ this.state.data}
+      >
+        <Tooltip content={ <div /> } />
+
+       <pattern id="pattern-stripe" 
+        width="6" height="8" 
+        patternUnits="userSpaceOnUse"
+        patternTransform="rotate(-45)">
+        <rect width="2" height="8" transform="translate(0,0)" fill="white"></rect>
+      </pattern>
+      <mask id="mask-stripe">
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-stripe)" />
+      </mask>
+
+        <XAxis dataKey="name"  tickLine={false} minTickGap={ 2 } />
+        <YAxis
+          tickFormatter={(value) => {
+            if (value === 0) {
+              return value;
+            }
+
+            return `${value / 1000}k`;
+          }}
+          tickLine={false}
+          axisLine={false} />
+        <Bar errorShape={ CandyBar } dataKey="value">
+         {
+            data.map((entry, index) => { 
+              // console.log('data map', entry, index);
+
+              return (
+              <Cell key={`cell-${index}`} fill={ ThemeManager.getVar('blue-1') } />
+            )})
+          }
+        </Bar>
+        <Brush hideText={ true } dataKey="name" travellerWidth={ 0 } />
+      </BarChart>
+    );
+  }
+
+
+// find min number things to get the corrext index length for brush
+// <Brush hideText={ true } dataKey="name" endIndex={ 8 } travellerWidth={ 0 } />
+  render() {
+
+    
+    const InputLabelSuffix = (
+      <FlexLayout alignItems="center" itemSpacing="10px">
+        <TextLabel style={ {
+          borderLeft: '1px solid #b8bfca',
+          padding: '5px 0px 5px 10px'
+        } }>
+          ms
+        </TextLabel>
+      </FlexLayout>
+    );
+
+
+    return (
+      <StackingLayout>
+
+
+
+
+        { this.state.sliderVal === 0 ? this.renderNoData() : this.renderBarChart() }
+
+        <Title size="h3">Data points</Title>
+        <Slider 
+          min={ 0 } 
+          max={ data.length } 
+          value={ this.state.sliderVal }
+          onChange={ this.onChangeSlider } 
+          step={ 1 }
+        />
+        <StackingLayout itemSpacing="0px">
+          <TextLabel size={ TextLabel.TEXT_LABEL_SIZE.SMALL } type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>
+          Autoplay and Interval Speed
+          </TextLabel>
+          <FlexLayout alignItems="center">
+            { this.renderAutoPlayBtn() }
+            <InputNumber
+              style={ { width: 80 } }
+              step={ 1 } 
+              onValueChange={ this.handleOnInputNumberChange } 
+              value={ this.state.autoPlayIntervalSpeed }
+              suffix={ InputLabelSuffix }
+          />
+          </FlexLayout>
+          </StackingLayout>
+      </StackingLayout>
+    );
+  }
+}
+
+<Example />
+```
+
+Color Palette
+```js
+const ColorPalette = require('../../../styleguide/components/ColorPalette/ColorPalette').default;
+
+<ColorPalette />
+```
+
+Horizontal
+```js
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
+const isNull = require('lodash').isNull;
+const Bar = require('../cartesian/Bar').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Legend = require('../../component/Legend').default;
+const ThemeManager = require('prism-reactjs').ThemeManager;
+
+const data = [
+  {
+    "name": "March",
+    "marValue": 45000
+  },
+  {
+    "name": "April",
+    "aprValue": 90000
+  },
+  {
+    "name": "May",
+    "mayValue": 90000
+  },
+  {
+    "name": "June",
+    "junValue": 70000
+  },
+  {
+    "name": "July",
+    "julValue": 70000
+  },
+  {
+    "name": "August",
+    "augValue": 45000
+  }
+];
+
+class Example extends React.Component {
+
+  getBarFillColor(bar) {
+    switch(bar) {
+      case 'marValue':
+        return '#6143d8';
+      case 'aprValue':
+        return '#486ae4';
+      case 'mayValue':
+        return '#2f91f1';
+      case 'junValue':
+        return '#39afee';
+      case 'julValue':
+        return '#65c2db';
+      case 'augValue':
+        return '#92d7c9';
+    }
+  }
+
+  renderBars() {
+    const bars = ['marValue', 'aprValue', 'mayValue', 'junValue', 'julValue', 'augValue'];
+
+    return bars.map(bar => { 
+      return (
+        <Bar 
+          stackId="a" 
+          dataKey={ bar } 
+          fill={ this.getBarFillColor(bar) }
+        />
+      );
+    });
+  }
+
+  render() {
+    return (
+      <BarChart layout="vertical"
+        width={730}
+        height={250}
+        data={data}
+      >
+          <XAxis 
+            type="number"
+            tickFormatter={(value) => {
+              if (value === 0) {
+                return value;
+              }
+
+              return `${value / 1000}k`;
+            }}
+            tickLine={false}
+          />
+          <YAxis 
+            dataKey="name" 
+            type="category"
+            axisLine={ false } 
+            tickLine={false} 
+          />
+        { this.renderBars() }
+      </BarChart>
+    );
+  }
+}
+
+<Example />
+```
+
 Brushing
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
-const Brush = require('../../cartesian/Brush').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
+const Brush = require('../cartesian/Brush').default;
 const Cell = require('../../component/Cell').default;
 const isNull = require('lodash').isNull;
 const map = require('lodash').map;
@@ -10,7 +524,7 @@ const Bar = require('../cartesian/Bar').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 
 import {
@@ -178,7 +692,6 @@ function generateData() {
     consolidatedData = [...consolidatedData, ...mappedData];
   }
 
-  console.log('generateData', dataLength, consolidatedData);
   return consolidatedData;
 }
 
@@ -299,7 +812,6 @@ class Example extends React.Component {
 
   getCatColor(id, type) {
     cat = this.state.sequentialColors ? 'sequential' : 'category';   
-    console.log('getCatColor', id, type, catColors);
     return catColors[cat][id][type];
   }
 
@@ -315,8 +827,6 @@ class Example extends React.Component {
   }
 
   getTooltipPayload(e, prevState) {
-    console.log('getTooltipPayload', e);
-
     let payload = {
       tooltipVisible: e && e.isTooltipActive || e && !!(e.activeTooltipIndex > -1)
     }
@@ -362,7 +872,6 @@ class Example extends React.Component {
 
     if (activeX && prevX && activeX !== prevX) {
       payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-      console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
     }
 
     return payload;
@@ -370,8 +879,6 @@ class Example extends React.Component {
 
   renderTooltipCats(payloads) {
     return payloads.map(payload => { 
-      console.log('renderTooltipCats', payload);
-
       return (
         <FlexLayout justifyContent="space-between">
           <Badge
@@ -391,7 +898,6 @@ class Example extends React.Component {
 
   renderTooltipContent() {
     let content = '';
-    console.log('renderTooltipContent');
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && !isEmpty(this.state.activePayload[0].payload)) {
       const totalVal = this.state.activePayload[0].payload.cat1 + this.state.activePayload[0].payload.cat2 + this.state.activePayload[0].payload.cat3;
       content = (
@@ -420,14 +926,13 @@ class Example extends React.Component {
 
   renderPopoverContent() {
     let content = '';
-    console.log('renderPopoverContent');
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload) {
       const payload = this.state.activePayload;
       const payloadName = payload[0].payload.name;
       const payloadTotal = `${payload[0].payload.cat1 + payload[0].payload.cat2 + payload[0].payload.cat3}%`;
       content = (
         <HeaderFooterLayout
-          onClick={ (e) => { e.stopPropagation(); console.log('onClick - Popover') } }
+          onClick={ (e) => { e.stopPropagation(); } }
           style={{width: '400px'}}
           itemSpacing="0px"
           header={
@@ -468,7 +973,6 @@ class Example extends React.Component {
 
   renderTooltipCursor() {
     const { cellWidth } = this.state;
-    console.log('renderTooltipCursor', cellWidth);
     const width = cellWidth ? `${cellWidth}px` : '1px';
 
     return (
@@ -507,7 +1011,6 @@ class Example extends React.Component {
   renderTip() {
     const { tipType } = this.state;
 
-    console.log('renderTip', this.state);
     return (
       <Tooltip
         isAnimationActive={ false }
@@ -554,7 +1057,6 @@ class Example extends React.Component {
   }
 
   getBarFillColor(bar, index) {
-    console.log('getBarFillColor', bar, index);
     const { barMouseDown, popoverVisible, activeTooltipIndex } = this.state;
     // Popover mode active
     if (popoverVisible) {
@@ -596,7 +1098,6 @@ class Example extends React.Component {
           {
             this.props.data.map((entry, index) => {
               // Each bar contains a cell per data point
-              console.log('cell render', entry, index, this.state);
               return (
                 <Cell
                   style={ this.getBarTransitionState(bar, index) }
@@ -612,7 +1113,6 @@ class Example extends React.Component {
   }
 
   renderBarChart() {
-    console.log('renderBarChart', this.props);
     return (
       <StackingLayout style={{width: '100%'}}>
         <FlexLayout alignItems="center" justifyContent="space-between">
@@ -632,7 +1132,6 @@ class Example extends React.Component {
                   if (e) {
                      this.setState((prevState) => {
                       let payload = this.getTooltipPayload(e, prevState);
-                      console.log('onClick', e, payload);
                       // If popover is active, then dismiss
                       if (prevState.tipType === 'popover') {
                         payload.tipType = 'tooltip';
@@ -644,7 +1143,6 @@ class Example extends React.Component {
                         payload.popoverVisible = true;
                       }
 
-                      console.log('onClick', payload, e, prevState);
                       setTimeout(() => {
                         this.setState({
                           tooltipAnimation: false
@@ -701,7 +1199,6 @@ class Example extends React.Component {
   }
 
   render() {
-    console.log('render stuff', this.state);
     return (
       <StackingLayout>
         <ContainerLayout backgroundColor="white" border={ true }>
@@ -739,12 +1236,12 @@ class Example extends React.Component {
 
 Dashboard Presentation
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const Cell = require('../../component/Cell').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
@@ -1029,7 +1526,6 @@ class DashboardChart extends React.Component {
   }
 
   render() {
-    console.log('renderererere', this.props);
     return this.renderChart();
   }
 }
@@ -1217,14 +1713,14 @@ class Example extends React.Component {
 
 Grouped Bar Chart
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const isEmpty = require('lodash').isEmpty;
 const Bar = require('../cartesian/Bar').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 
 import {
@@ -1310,8 +1806,6 @@ class Example extends React.Component {
 
   handleCheckboxOnChange(e, id) {
     this.setState((prevState) => {
-        console.log('handleCheckboxOnChange', e, id);
-
         const payload = {};
 
         switch(id) {
@@ -1325,7 +1819,6 @@ class Example extends React.Component {
             payload.showCat3 = !prevState.showCat3;
             break;
         }
-
 
         return payload;
       });
@@ -1373,10 +1866,8 @@ class Example extends React.Component {
 
     if (activeX && prevX && activeX !== prevX) {
       payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-      console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
     }
 
-    console.log('onMouseMove', payload, e);
     return payload;
   }
 
@@ -1410,7 +1901,6 @@ class Example extends React.Component {
 
   renderTooltipCats(payloads) {
     return payloads.map(payload => { 
-      console.log('renderTooltipCats', payload);
 
       let color;
       switch(payload.fill) {
@@ -1444,7 +1934,6 @@ class Example extends React.Component {
 
   renderTooltipContent() {
     let content = '';
-    console.log('renderTooltipContent', this.state);
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && !isEmpty(this.state.activePayload[0].payload)) {
       const totalVal = this.state.activePayload[0].payload.cat1 + this.state.activePayload[0].payload.cat2 + this.state.activePayload[0].payload.cat3;
       content = (
@@ -1579,14 +2068,14 @@ class Example extends React.Component {
 
 Stacked Bar Chart
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const isEmpty = require('lodash').isEmpty;
 const Bar = require('../cartesian/Bar').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 
 import {
@@ -1672,8 +2161,6 @@ class Example extends React.Component {
 
   handleCheckboxOnChange(e, id) {
     this.setState((prevState) => {
-        console.log('handleCheckboxOnChange', e, id);
-
         const payload = {};
 
         switch(id) {
@@ -1735,10 +2222,8 @@ class Example extends React.Component {
 
     if (activeX && prevX && activeX !== prevX) {
       payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-      console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
     }
 
-    console.log('onMouseMove', payload, e);
     return payload;
   }
 
@@ -1772,8 +2257,6 @@ class Example extends React.Component {
 
   renderTooltipCats(payloads) {
     return payloads.map(payload => { 
-      console.log('renderTooltipCats', payload);
-
       let color;
       switch(payload.fill) {
         case '#36d068':
@@ -1806,7 +2289,6 @@ class Example extends React.Component {
 
   renderTooltipContent() {
     let content = '';
-    console.log('renderTooltipContent', this.state);
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && !isEmpty(this.state.activePayload[0].payload)) {
       const totalVal = this.state.activePayload[0].payload.cat1 + this.state.activePayload[0].payload.cat2 + this.state.activePayload[0].payload.cat3;
       content = (
@@ -1941,7 +2423,7 @@ class Example extends React.Component {
 
 Stacked Bar Chart with Hover and Click Interaction
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const Cell = require('../../component/Cell').default;
 const isNull = require('lodash').isNull;
 const isEmpty = require('lodash').isEmpty;
@@ -1949,7 +2431,7 @@ const Bar = require('../cartesian/Bar').default;
 const ResponsiveContainer = require('../../component/ResponsiveContainer').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 
 import {
@@ -2200,7 +2682,6 @@ class Example extends React.Component {
 
   getCatColor(id, type) {
     cat = this.state.sequentialColors ? 'sequential' : 'category';   
-    console.log('getCatColor', id, type, catColors);
     return catColors[cat][id][type];
   }
 
@@ -2261,17 +2742,13 @@ class Example extends React.Component {
 
     if (activeX && prevX && activeX !== prevX) {
       payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-      console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
     }
 
-    console.log('onMouseMove', e);
     return payload;
   }
 
   renderTooltipCats(payloads) {
     return payloads.map(payload => { 
-      console.log('renderTooltipCats', payload);
-
       return (
         <FlexLayout justifyContent="space-between">
           <Badge
@@ -2291,7 +2768,6 @@ class Example extends React.Component {
 
   renderTooltipContent() {
     let content = '';
-    console.log('renderTooltipContent');
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && !isEmpty(this.state.activePayload[0].payload)) {
       const totalVal = this.state.activePayload[0].payload.cat1 + this.state.activePayload[0].payload.cat2 + this.state.activePayload[0].payload.cat3;
       content = (
@@ -2320,14 +2796,13 @@ class Example extends React.Component {
 
   renderPopoverContent() {
     let content = '';
-    console.log('renderPopoverContent');
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload) {
       const payload = this.state.activePayload;
       const payloadName = payload[0].payload.name;
       const payloadTotal = `${payload[0].payload.cat1 + payload[0].payload.cat2 + payload[0].payload.cat3}%`;
       content = (
         <HeaderFooterLayout
-          onClick={ (e) => { e.stopPropagation(); console.log('onClick - Popover') } }
+          onClick={ (e) => { e.stopPropagation(); } }
           style={{width: '400px'}}
           itemSpacing="0px"
           header={
@@ -2368,7 +2843,6 @@ class Example extends React.Component {
 
   renderTooltipCursor() {
     const { cellWidth } = this.state;
-    console.log('renderTooltipCursor', cellWidth);
     const width = cellWidth ? `${cellWidth}px` : '1px';
 
     return (
@@ -2407,7 +2881,6 @@ class Example extends React.Component {
   renderTip() {
     const { tipType } = this.state;
 
-    console.log('renderTip', this.state);
     return (
       <Tooltip
         isAnimationActive={ false }
@@ -2494,7 +2967,6 @@ class Example extends React.Component {
           {
             data.map((entry, index) => {
               // Each bar contains a cell per data point
-              console.log('cell render', entry, index, this.state);
               return (
                 <Cell
                   style={ this.getBarTransitionState(bar, index) }
@@ -2539,7 +3011,6 @@ class Example extends React.Component {
                       payload.popoverVisible = true;
                     }
 
-                    console.log('onClick', payload, e, prevState);
                     setTimeout(() => {
                       this.setState({
                         tooltipAnimation: false
@@ -2594,7 +3065,6 @@ class Example extends React.Component {
   }
 
   render() {
-    console.log('render stuff', this.state);
     return (
       <StackingLayout>
         <ContainerLayout backgroundColor="white" border={ true }>
@@ -2628,12 +3098,12 @@ class Example extends React.Component {
 
 Interactions: On Click for Popover.
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const Cell = require('../../component/Cell').default;
 
@@ -2711,7 +3181,7 @@ class Example extends React.Component {
     if (this.state.activePayload && this.state.activePayload[0] && this.state.activePayload[0].payload && this.state.activePayload[0].payload.value) {
       content = (
         <HeaderFooterLayout
-          onClick={ (e) => { e.stopPropagation(); console.log('onClick - Popover') } }
+          onClick={ (e) => { e.stopPropagation(); } }
           style={{width: '400px'}}
           itemSpacing="0px"
           header={
@@ -2804,7 +3274,6 @@ class Example extends React.Component {
 
                 if (activeX && prevX && activeX !== prevX) {
                   payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-                  console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
                 }
 
                 return payload;
@@ -2849,7 +3318,6 @@ class Example extends React.Component {
 
                   if (activeX && prevX && activeX !== prevX) {
                     payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-                    console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
                   }
 
                   return payload;
@@ -2909,12 +3377,12 @@ class Example extends React.Component {
 
 Interactions: On Click. On click, change the context to show more details / meta data associated with the bar chart. The back link should take the user back to the bar chart. The interim state or clicked state should remove the hover background and reduce the opacity of the other bars to 20%.
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const Cell = require('../../component/Cell').default;
 
@@ -3152,12 +3620,12 @@ class Example extends React.Component {
 
 Interactions: On Hover. On hover show tool tip at top of the (hover) bar that is highlighted.
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const ThemeManager = require('prism-reactjs').ThemeManager;
 
@@ -3250,10 +3718,8 @@ class Example extends React.Component {
 
                 if (activeX && prevX && activeX !== prevX) {
                   payload.tooltipKeyCounter = prevState.tooltipKeyCounter + 1;
-                  console.log('tooltipKeyCounter', activeX, payload.tooltipKeyCounter);
                 }
 
-                console.log('onMouseMove', payload, e);
                 return payload;
 
               });
@@ -3306,7 +3772,7 @@ class Example extends React.Component {
 
 Basic
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const isNull = require('lodash').isNull;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
@@ -3371,11 +3837,11 @@ class Example extends React.Component {
 
 Vanilla BarChart
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const Bar = require('../cartesian/Bar').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const data = [
   {
@@ -3437,10 +3903,10 @@ syncId: SynchronizedAreaChart
 ```js
 const Area = require('../../cartesian/Area').default;
 const AreaChart = require('../../chart/AreaChart').default;
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const data = [
   {
     name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
@@ -3547,10 +4013,10 @@ const data = [
 
 barSize: MixBarChart
 ```js
-const CartesianGrid = require('../../cartesian/CartesianGrid').default;
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Tooltip = require('../../component/Tooltip').default;
+const Tooltip = require('../component/Tooltip').default;
 const Legend = require('../../component/Legend').default;
 const Bar = require('../cartesian/Bar').default;
 const data = [
