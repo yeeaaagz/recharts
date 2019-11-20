@@ -28,11 +28,7 @@ import { calculateActiveTickIndex, getMainColorOfGraphicItem, getBarSizeList,
   getBandSizeOfAxis, getStackGroupsByAxisId, getValueByDataKey, isCategorialAxis,
   getDomainOfItemsWithSameAxis, getDomainOfStackGroups, getDomainOfDataByKey,
   detectReferenceElementsDomain, parseSpecifiedDomain, parseDomainOfCategoryAxis } from '../util/ChartUtils';
-
-
 import { getChartArea } from '../ntnx/util/ChartUtils';
-
-
 import { inRangeOfSector, polarToCartesian } from '../util/PolarUtils';
 import { shallowEqual } from '../util/PureRender';
 import { eventCenter, SYNC_EVENT } from '../util/Events';
@@ -118,7 +114,6 @@ const generateCategoricalChart = ({
       }
 
       return this._getMaxBarsForDiagram(width - offset, barSizeList, barGap, props.data.length, toleranceRange);
-
     };
 
     /**
@@ -139,7 +134,7 @@ const generateCategoricalChart = ({
         const chartArea = getChartArea(barSizeList[0], barGap, barCount);
 
         // Take the padding for tolerance range (min) and apply to both sides of chart. e.g. 10px 
-        // min tolerance is 20px total padding must be added to chart area. Also must add aditonal 
+        // min tolerance is 20px total padding must be added to chart area. Also must add additional 
         // bar gap to correctly measure band size for the chart area even though it may be larger 
         // than what it visually is.
         if ((chartArea + barGap + (toleranceRange[0] * 2)) <= (diagramWidth)) {
@@ -982,7 +977,6 @@ const generateCategoricalChart = ({
      * @return {Object} The offset of main part in the svg element
      */
     calculateOffset({ props, graphicalItems, xAxisMap = {}, yAxisMap = {} }) {
-      // const { width, height, children } = props;
       const { width, height, children } = props;
       const margin = props.margin || {};
       const brushItem = findChildByType(children, Brush);
@@ -1618,11 +1612,6 @@ const generateCategoricalChart = ({
       const { activeDot, hide } = item.item.props;
       const hasActive = !hide && isTooltipActive && tooltipItem && activeDot &&
         activeTooltipIndex >= 0;
-
-
-
-
-        console.log('renderGraphicChild', element, displayName, index);
         
       function findWithPayload(entry) {
         return tooltipAxis.dataKey(entry.payload);

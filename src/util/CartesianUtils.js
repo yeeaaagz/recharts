@@ -140,7 +140,6 @@ export const formatAxisMap = (props, axisMap, offset, axisType, chartName, getCe
     }
 
     const axisWidth = alignment ==='center' ? width - offset.left : offset.width;
-
     const finalAxis = {
       ...axis,
       ...ticks,
