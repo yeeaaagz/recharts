@@ -232,8 +232,6 @@ export default class Bar extends ReBar {
       return item && item.value;
     });
 
-    console.log('renderRectanglesStatically', data, this.props);
-
     const baseProps = getPresentationAttributes(this.props);
     return data && data.map((entry, i) => {
       const props = { ...baseProps, ...entry, index: i };

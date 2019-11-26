@@ -7,7 +7,6 @@ let themeVars = {};
 function createSections() {
   return [
     {
-
       name: 'Color Palette',
       content: './styleguide/ColorPalette.md'
     },
@@ -28,7 +27,6 @@ function createSections() {
   ];
 }
 
-  // components: 'src/ntnx/**/*.js',
 module.exports = {
   require: [
     path.join(__dirname, 'node_modules/prism-reactjs/dist/index.css')

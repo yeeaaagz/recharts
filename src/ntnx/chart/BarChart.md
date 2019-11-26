@@ -170,8 +170,7 @@ const data = [
 
 class Example extends React.Component {
   constructor(props) {
-    // const startValue = 12;
-    const startValue = 35;
+    const startValue = 12;
 
     this.state = {
       autoPlay: false,

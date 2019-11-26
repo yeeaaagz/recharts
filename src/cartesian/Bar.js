@@ -368,9 +368,6 @@ class Bar extends Component {
       width, height, isAnimationActive, background, id } = this.props;
     if (hide || !data || !data.length) { return null; }
 
-
-    console.log('renderBar', this.props);
-
     const { isAnimationFinished } = this.state;
     const layerClass = classNames('recharts-bar', className);
     const needClip = (xAxis && xAxis.allowDataOverflow) || (yAxis && yAxis.allowDataOverflow);

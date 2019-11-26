@@ -165,8 +165,6 @@ const generateCategoricalChart = ({
         const maxBars = this.getMaxBarsForDiagram(props, axisComponents);
         scrollBarNeeded = maxBars < props.data.length;
 
-        console.log('maxBars', maxBars);
-
         // When using center alignment style, the end index is automatically calculated based on 
         // max bars that can fit within the diagram width.
         endIndex = brushEndIndex || (maxBars - 1 || 0);
@@ -1078,10 +1076,6 @@ const generateCategoricalChart = ({
     };
 
     handleBrushChange = ({ startIndex, endIndex }) => {
-
-
-      console.log('handleBrushChange', startIndex, endIndex);
-
       // Only trigger changes if the extents of the brush have actually changed
       if (startIndex !== this.state.dataStartIndex || endIndex !== this.state.dataEndIndex) {
         const { updateId } = this.state;
@@ -1515,8 +1509,6 @@ const generateCategoricalChart = ({
         return null;
       }
 
-      console.log('renderBrush', dataStartIndex, dataEndIndex);
-
       // TODO: update brush when children update
       return cloneElement(element, {
         alignment,
@@ -1611,10 +1603,6 @@ const generateCategoricalChart = ({
     renderGraphicChild = (element, displayName, index) => {
       const item = this.filterFormatItem(element, displayName, index);
       if (!item) { return null; }
-
-
-      console.log('renderGraphicChild', element, displayName, index, this.state);
-
       const graphicalItem = cloneElement(element, item.props);
       const { isTooltipActive, tooltipAxis, activeTooltipIndex, activeLabel } = this.state;
       const { children } = this.props;
