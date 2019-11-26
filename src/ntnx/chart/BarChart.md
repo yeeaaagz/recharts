@@ -1,14 +1,10 @@
 Centered with No Data and Missing Data Examples
 ```js
-const CartesianGrid = require('../cartesian/CartesianGrid').default;
 const Cell = require('../../component/Cell').default;
-const isNull = require('lodash').isNull;
-const isUndefined = require('lodash').isUndefined;
 const Bar = require('../cartesian/Bar').default;
 const Brush = require('../cartesian/Brush').default;
 const XAxis = require('../../cartesian/XAxis').default;
 const YAxis = require('../../cartesian/YAxis').default;
-const Legend = require('../../component/Legend').default;
 const Tooltip = require('../component/Tooltip').default;
 
 import {
@@ -174,7 +170,8 @@ const data = [
 
 class Example extends React.Component {
   constructor(props) {
-    const startValue = 12;
+    // const startValue = 12;
+    const startValue = 35;
 
     this.state = {
       autoPlay: false,
@@ -236,14 +233,14 @@ class Example extends React.Component {
   renderAutoPlayBtn() {
     if (this.state.autoPlay) {
       return (
-        <RTooltip content="Stop Auto Play">
+        <RTooltip content="Stop Auto Play Loop">
           <Button  onClick={ this.onChangeAutoPlay }type="destructive"><SuspendIcon /></Button>
         </RTooltip>
       );
     } 
 
     return (
-      <RTooltip content="Auto Play">
+      <RTooltip content="Auto Play Loop">
         <Button onClick={ this.onChangeAutoPlay }><RestartIcon /></Button>
       </RTooltip>
     );
@@ -372,13 +369,6 @@ class Example extends React.Component {
 <Example />
 ```
 
-Color Palette
-```js
-const ColorPalette = require('../../../styleguide/components/ColorPalette/ColorPalette').default;
-
-<ColorPalette />
-```
-
 Horizontal
 ```js
 const CartesianGrid = require('../cartesian/CartesianGrid').default;
@@ -421,17 +411,17 @@ class Example extends React.Component {
   getBarFillColor(bar) {
     switch(bar) {
       case 'marValue':
-        return '#6143d8';
+        return ThemeManager.getVar('linear-6-1-color');
       case 'aprValue':
-        return '#486ae4';
+        return ThemeManager.getVar('linear-6-2-color');
       case 'mayValue':
-        return '#2f91f1';
+        return ThemeManager.getVar('linear-6-3-color');
       case 'junValue':
-        return '#39afee';
+        return ThemeManager.getVar('linear-6-4-color');
       case 'julValue':
-        return '#65c2db';
+        return ThemeManager.getVar('linear-6-5-color');
       case 'augValue':
-        return '#92d7c9';
+        return ThemeManager.getVar('linear-6-6-color');
     }
   }
 

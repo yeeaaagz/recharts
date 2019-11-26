@@ -28,7 +28,7 @@ import { calculateActiveTickIndex, getMainColorOfGraphicItem, getBarSizeList,
   getBandSizeOfAxis, getStackGroupsByAxisId, getValueByDataKey, isCategorialAxis,
   getDomainOfItemsWithSameAxis, getDomainOfStackGroups, getDomainOfDataByKey,
   detectReferenceElementsDomain, parseSpecifiedDomain, parseDomainOfCategoryAxis } from '../util/ChartUtils';
-import { getChartArea } from '../ntnx/util/ChartUtils';
+import { getBarChartArea } from '../ntnx/util/ChartUtils';
 import { inRangeOfSector, polarToCartesian } from '../util/PolarUtils';
 import { shallowEqual } from '../util/PureRender';
 import { eventCenter, SYNC_EVENT } from '../util/Events';
@@ -39,7 +39,11 @@ const ORIENT_MAP = {
 };
 
 const originCoordinate = { x: 0, y: 0 };
-
+const centerBarChartDefaultConfig = {
+  barGap: 20,
+  barSizeList: [10, 15, 20, 25, 30],
+  toleranceRange: [10, 100]
+};
 const generateCategoricalChart = ({
   chartName, GraphicalChild, eventType = 'axis', axisComponents, legendContent,
   formatAxisMap, defaultProps, propTypes,
@@ -102,9 +106,7 @@ const generateCategoricalChart = ({
      */
     static getMaxBarsForDiagram = (props, axisComponents) => {
       const { children, width } = props;
-      const barGap = 20;
-      const barSizeList = [10, 15, 20, 25, 30];
-      const toleranceRange = [10, 100];
+      const { barGap, barSizeList, toleranceRange  } = centerBarChartDefaultConfig;
       const yAxis = _.find(axisComponents, function(axis) { return axis.axisType === 'yAxis' });
       const axes = findAllByType(children, yAxis.AxisComp);
       
@@ -131,7 +133,7 @@ const generateCategoricalChart = ({
       // For each increase in bars, find out the limit how many can fit within the diagram width.
       let fittableBars = 0;
       for (let barCount = 0; barCount < totalBars; barCount++) {
-        const chartArea = getChartArea(barSizeList[0], barGap, barCount);
+        const chartArea = getBarChartArea(barSizeList[0], barGap, barCount);
 
         // Take the padding for tolerance range (min) and apply to both sides of chart. e.g. 10px 
         // min tolerance is 20px total padding must be added to chart area. Also must add additional 
@@ -161,11 +163,9 @@ const generateCategoricalChart = ({
       let scrollBarNeeded = false, startIndex, endIndex;
       if (alignment === 'center') {
         const maxBars = this.getMaxBarsForDiagram(props, axisComponents);
-        const isScrollbarNeeded = (fittableBars, totalBars) => {
-          return fittableBars < totalBars;
-        };
+        scrollBarNeeded = maxBars < props.data.length;
 
-        scrollBarNeeded = isScrollbarNeeded(maxBars, props.data.length);
+        console.log('maxBars', maxBars);
 
         // When using center alignment style, the end index is automatically calculated based on 
         // max bars that can fit within the diagram width.
@@ -758,7 +758,7 @@ const generateCategoricalChart = ({
 
       let x;
       let width;
-      // When performing center alignment, then reduce the rectange cursor size to fit the bar snuggly.
+      // When performing center alignment, then reduce the rectangle cursor size to fit the bar snuggly.
       if (alignment === 'center' && layout === 'horizontal') {
         const barGap = 20;
         const barSize = tooltipAxisBandSize - barGap;
@@ -1078,6 +1078,10 @@ const generateCategoricalChart = ({
     };
 
     handleBrushChange = ({ startIndex, endIndex }) => {
+
+
+      console.log('handleBrushChange', startIndex, endIndex);
+
       // Only trigger changes if the extents of the brush have actually changed
       if (startIndex !== this.state.dataStartIndex || endIndex !== this.state.dataEndIndex) {
         const { updateId } = this.state;
@@ -1511,8 +1515,12 @@ const generateCategoricalChart = ({
         return null;
       }
 
+      console.log('renderBrush', dataStartIndex, dataEndIndex);
+
       // TODO: update brush when children update
       return cloneElement(element, {
+        alignment,
+        toleranceRange: centerBarChartDefaultConfig.toleranceRange,
         key: element.key || '_recharts-brush',
         onChange: combineEventHandlers(this.handleBrushChange, null, element.props.onChange),
         data,
@@ -1603,6 +1611,9 @@ const generateCategoricalChart = ({
     renderGraphicChild = (element, displayName, index) => {
       const item = this.filterFormatItem(element, displayName, index);
       if (!item) { return null; }
+
+
+      console.log('renderGraphicChild', element, displayName, index, this.state);
 
       const graphicalItem = cloneElement(element, item.props);
       const { isTooltipActive, tooltipAxis, activeTooltipIndex, activeLabel } = this.state;

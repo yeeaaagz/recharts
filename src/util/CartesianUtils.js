@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { getTicksOfScale, parseScale, checkDomainOfScale, getBandSizeOfAxis } from './ChartUtils';
-import { getChartArea } from '../ntnx/util/ChartUtils';
+import { getBarChartArea } from '../ntnx/util/ChartUtils';
 
 /**
  * Calculate the scale function, position, width, height of axes
@@ -61,7 +61,7 @@ export const formatAxisMap = (props, axisMap, offset, axisType, chartName, getCe
       let centerRangeStart, centerRangeEnd, newBarSize;
       // Test the list of bar sizes to find which size fits the maximum bars available.
       _.each(barSizeList, (barSize, index) => {
-        const chartArea = getChartArea(barSize, barGap, numBars) + barGap;
+        const chartArea = getBarChartArea(barSize, barGap, numBars) + barGap;
         const offsetDistance = getCenterOffsetDistance(diagramWidth + offset, chartArea, barGap, offset);
 
         // Offset distance is distance chart area starts from the beginning of x-axis. If offset 
@@ -78,7 +78,7 @@ export const formatAxisMap = (props, axisMap, offset, axisType, chartName, getCe
 
       // Min threshold hit. Set the bar size to the minimum allowed.
       if (!newBarSize) {
-        const chartArea = getChartArea(barSizeList[0], barGap, numBars) + barGap;
+        const chartArea = getBarChartArea(barSizeList[0], barGap, numBars) + barGap;
         centerRangeStart = getCenterOffset(diagramWidth, chartArea) + offset;
         centerRangeEnd = centerRangeStart + chartArea;
         newBarSize = barSizeList[0];
@@ -131,7 +131,7 @@ export const formatAxisMap = (props, axisMap, offset, axisType, chartName, getCe
 
     if (axisType === 'xAxis') {
       needSpace = (orientation === 'top' && !mirror) || (orientation === 'bottom' && mirror);
-      x = alignment ==='center' ? offset.left : offset.left;
+      x = offset.left;
       y = steps[offsetKey] - needSpace * axis.height;
     } else if (axisType === 'yAxis') {
       needSpace = (orientation === 'left' && !mirror) || (orientation === 'right' && mirror);

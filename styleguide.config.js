@@ -4,11 +4,36 @@ const jsParseHOC = require('react-docgen-annotation-resolver');
 const path = require('path');
 let themeVars = {};
 
+function createSections() {
+  return [
+    {
+
+      name: 'Color Palette',
+      content: './styleguide/ColorPalette.md'
+    },
+    {
+      name: 'Charts',
+      components: 'src/ntnx/chart/**/*.js'
+    },
+    {
+      name: 'Cartesian',
+      components: 'src/ntnx/cartesian/**/*.js',
+      exampleMode: 'collapse'
+    },
+    {
+      name: 'Component',
+      components: 'src/ntnx/component/**/*.js',
+      exampleMode: 'collapse'
+    }
+  ];
+}
+
+  // components: 'src/ntnx/**/*.js',
 module.exports = {
   require: [
     path.join(__dirname, 'node_modules/prism-reactjs/dist/index.css')
   ],
-  components: 'src/ntnx/**/*.js',
+  sections: createSections(),
   resolver: jsParse.resolver.findAllComponentDefinitions,
   propsParser(filePath, source, resolver, handlers) {
     let docs = {};

@@ -25,6 +25,10 @@ export default class BarChart extends ReBarChart {
 
   static propTypes = {
     /**
+     * Align the bars in the center of the chart area. Bar size and gap will automatically resize.
+     */
+    alignment: PropTypes.oneOf(['center']),
+    /**
      * If any two categorical charts(LineChart, AreaChart, BarChart, ComposedChart) have the same
      * syncId, these two charts can sync the position tooltip, and the startIndex, endIndex of Brush.
      */
