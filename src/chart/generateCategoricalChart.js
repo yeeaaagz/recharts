@@ -109,7 +109,7 @@ const generateCategoricalChart = ({
       const { barGap, barSizeList, toleranceRange  } = centerBarChartDefaultConfig;
       const yAxis = _.find(axisComponents, function(axis) { return axis.axisType === 'yAxis' });
       const axes = findAllByType(children, yAxis.AxisComp);
-      
+
       let offset = 0;
       if (axes && axes.length) {
         offset = axes[0].props.width;
@@ -125,21 +125,22 @@ const generateCategoricalChart = ({
      * @param {array} barSizeList - list of available sizes for bars for bar chart
      * @param {number} barGap - gap distance between bars
      * @param {number} totalBars - total amount of bars to be used for diagram
-     * @param {array} toleranceRange - min and max values allowed for bar padding within the 
+     * @param {array} toleranceRange - min and max values allowed for bar padding within the
      *   diagram width
      * @return {number} maximum amount of bars that can fit in the diagram
      */
     static _getMaxBarsForDiagram = (diagramWidth, barSizeList, barGap, totalBars, toleranceRange) => {
       // For each increase in bars, find out the limit how many can fit within the diagram width.
       let fittableBars = 0;
-      for (let barCount = 0; barCount < totalBars; barCount++) {
+      for (let i = 0; i < totalBars; i++) {
+        const barCount = i + 1;
+        // Do not start with 0 bars
         const chartArea = getBarChartArea(barSizeList[0], barGap, barCount);
-
-        // Take the padding for tolerance range (min) and apply to both sides of chart. e.g. 10px 
-        // min tolerance is 20px total padding must be added to chart area. Also must add additional 
-        // bar gap to correctly measure band size for the chart area even though it may be larger 
-        // than what it visually is.
-        if ((chartArea + barGap + (toleranceRange[0] * 2)) <= (diagramWidth)) {
+        // The tolerance range is an offset that reduces the space available to fit the bars. e.g.
+        // 10px min tolerance is 20px offset space that should be removed from the diagramWidth.
+        // Then if the chart area fits in the calculated space, the amount of bars provided
+        // passes as true.
+        if ((chartArea) <= (diagramWidth - (toleranceRange[0] * 2))) {
           fittableBars++;
         } else {
           break;
@@ -155,7 +156,7 @@ const generateCategoricalChart = ({
      * @param {array} axisComponents - x and y axis components
      * @return {object} Whole new state
      */
-    static createDefaultState = (props, axisComponents) => {      
+    static createDefaultState = (props, axisComponents) => {
       const { alignment, children, defaultShowTooltip, width } = props;
       const brushItem = findChildByType(children, Brush);
       const brushEndIndex = (brushItem && brushItem.props && brushItem.props.endIndex);
@@ -165,12 +166,12 @@ const generateCategoricalChart = ({
         const maxBars = this.getMaxBarsForDiagram(props, axisComponents);
         scrollBarNeeded = maxBars < props.data.length;
 
-        // When using center alignment style, the end index is automatically calculated based on 
+        // When using center alignment style, the end index is automatically calculated based on
         // max bars that can fit within the diagram width.
         endIndex = brushEndIndex || (maxBars - 1 || 0);
       // default
       } else {
-        endIndex = brushEndIndex || ((props.data && (props.data.length - 1)) || 0);        
+        endIndex = brushEndIndex || ((props.data && (props.data.length - 1)) || 0);
       }
 
       startIndex = (brushItem && brushItem.props && brushItem.props.startIndex) || 0;
@@ -228,14 +229,14 @@ const generateCategoricalChart = ({
 
       const defaultState = this.constructor.createDefaultState(props, axisComponents);
       const updateId = 0;
-      this.state = { 
-        ...defaultState, 
+      this.state = {
+        ...defaultState,
         updateId: 0,
-        ...this.updateStateOfAxisMapsOffsetAndStackGroups({ 
-          props, 
-          ...defaultState, 
-          updateId 
-        }) 
+        ...this.updateStateOfAxisMapsOffsetAndStackGroups({
+          props,
+          ...defaultState,
+          updateId
+        })
       };
 
       this.uniqueChartId = _.isNil(props.id) ? uniqueId('recharts') : props.id;
@@ -668,7 +669,7 @@ const generateCategoricalChart = ({
     }
 
     /**
-     * Get the container width, subtract it by width needed for items total size. Then divide by two 
+     * Get the container width, subtract it by width needed for items total size. Then divide by two
      * to get the start position of where to draw bars.
      * @param  {number} containerWidth - width of container
      * @param  {number} graphicalItemsWidth - width of graphical items inside container
@@ -763,7 +764,7 @@ const generateCategoricalChart = ({
         // Padding for one side of bar
         const hoverPadding = 5;
 
-        // The active x coordinate starts in the center of the band size. So if band size for 
+        // The active x coordinate starts in the center of the band size. So if band size for
         // example is 30px, then active coordinate x will start at the 15px point.
         x = activeCoordinate.x - (barSize / 2) - hoverPadding;
         width = barSize + (hoverPadding * 2);
@@ -927,10 +928,10 @@ const generateCategoricalChart = ({
 
       Object.keys(axisObj).forEach((key) => {
         axisObj[key] = formatAxisMap(
-          props, 
-          axisObj[key], 
-          offset, 
-          key.replace('Map', ''), 
+          props,
+          axisObj[key],
+          offset,
+          key.replace('Map', ''),
           chartName,
           getCenterOffset
         );
@@ -1611,7 +1612,7 @@ const generateCategoricalChart = ({
       const { activeDot, hide } = item.item.props;
       const hasActive = !hide && isTooltipActive && tooltipItem && activeDot &&
         activeTooltipIndex >= 0;
-        
+
       function findWithPayload(entry) {
         return tooltipAxis.dataKey(entry.payload);
       }

@@ -222,7 +222,7 @@ class Example extends React.Component {
       if (!prevState.autoPlay) {
         this.startTimeOut();
       }
-      
+
       return {
         autoPlay: !prevState.autoPlay
       };
@@ -236,7 +236,7 @@ class Example extends React.Component {
           <Button  onClick={ this.onChangeAutoPlay }type="destructive"><SuspendIcon /></Button>
         </RTooltip>
       );
-    } 
+    }
 
     return (
       <RTooltip content="Auto Play Loop">
@@ -259,7 +259,7 @@ class Example extends React.Component {
 
   renderBarChart() {
     const CandyBar = (props) => {
-      const {     
+      const {
         x: oX,
         y: oY,
         width: oWidth,
@@ -267,14 +267,14 @@ class Example extends React.Component {
         value,
         fill
       } = props;
-      
+
       let x = oX;
       let y = oHeight < 0 ? oY + oHeight : oY;
       let width = oWidth;
       let height = Math.abs(oHeight);
 
       return (
-        <rect 
+        <rect
           fill={ ThemeManager.getVar('light-gray-1') }
           mask='url(#mask-stripe)'
           x={x}
@@ -283,7 +283,7 @@ class Example extends React.Component {
           height={ !value ? props.background.height : height} />
         );
     };
-       
+
     return (
       <BarChart
         alignment="center"
@@ -311,7 +311,7 @@ class Example extends React.Component {
           axisLine={false} />
         <Bar errorShape={ CandyBar } dataKey="value">
           {
-            data.map((entry, index) => { 
+            data.map((entry, index) => {
               return (
               <Cell key={`cell-${index}`} fill={ ThemeManager.getVar('blue-1') } />
             )})
@@ -322,7 +322,7 @@ class Example extends React.Component {
     );
   }
 
-  render() {  
+  render() {
     const InputLabelSuffix = (
       <FlexLayout alignItems="center" itemSpacing="10px">
         <TextLabel style={ {
@@ -338,11 +338,11 @@ class Example extends React.Component {
       <StackingLayout>
         { this.state.sliderVal === 0 ? this.renderNoData() : this.renderBarChart() }
         <Title size="h3">Data points</Title>
-        <Slider 
-          min={ 0 } 
-          max={ data.length } 
+        <Slider
+          min={ 0 }
+          max={ data.length }
           value={ this.state.sliderVal }
-          onChange={ this.onChangeSlider } 
+          onChange={ this.onChangeSlider }
           step={ 1 }
         />
         <StackingLayout itemSpacing="0px">
@@ -353,8 +353,8 @@ class Example extends React.Component {
             { this.renderAutoPlayBtn() }
             <InputNumber
               style={ { width: 80 } }
-              step={ 1 } 
-              onValueChange={ this.handleOnInputNumberChange } 
+              step={ 1 }
+              onValueChange={ this.handleOnInputNumberChange }
               value={ this.state.autoPlayIntervalSpeed }
               suffix={ InputLabelSuffix }
           />
@@ -427,11 +427,11 @@ class Example extends React.Component {
   renderBars() {
     const bars = ['marValue', 'aprValue', 'mayValue', 'junValue', 'julValue', 'augValue'];
 
-    return bars.map(bar => { 
+    return bars.map(bar => {
       return (
-        <Bar 
-          stackId="a" 
-          dataKey={ bar } 
+        <Bar
+          stackId="a"
+          dataKey={ bar }
           fill={ this.getBarFillColor(bar) }
         />
       );
@@ -445,7 +445,7 @@ class Example extends React.Component {
         height={250}
         data={data}
       >
-          <XAxis 
+          <XAxis
             type="number"
             tickFormatter={(value) => {
               if (value === 0) {
@@ -456,11 +456,11 @@ class Example extends React.Component {
             }}
             tickLine={false}
           />
-          <YAxis 
-            dataKey="name" 
+          <YAxis
+            dataKey="name"
             type="category"
-            axisLine={ false } 
-            tickLine={false} 
+            axisLine={ false }
+            tickLine={false}
           />
         { this.renderBars() }
       </BarChart>
@@ -770,7 +770,7 @@ class Example extends React.Component {
   }
 
   getCatColor(id, type) {
-    cat = this.state.sequentialColors ? 'sequential' : 'category';   
+    cat = this.state.sequentialColors ? 'sequential' : 'category';
     return catColors[cat][id][type];
   }
 
@@ -837,7 +837,7 @@ class Example extends React.Component {
   }
 
   renderTooltipCats(payloads) {
-    return payloads.map(payload => { 
+    return payloads.map(payload => {
       return (
         <FlexLayout justifyContent="space-between">
           <Badge
@@ -1045,11 +1045,11 @@ class Example extends React.Component {
     const cursor = this.state.tipType === 'popover' ? 'default' : 'pointer';
     const bars = ['cat1', 'cat2', 'cat3'];
 
-    return bars.map(bar => { 
+    return bars.map(bar => {
       return (
-        <Bar 
-          stackId="a" 
-          dataKey={ bar } 
+        <Bar
+          stackId="a"
+          dataKey={ bar }
           onMouseDown={ this.handleBarMouseDown }
           onMouseUp={ this.handleBarMouseUp }
           isAnimationActive={ false }
@@ -1178,9 +1178,9 @@ class Example extends React.Component {
             bodyContent={ this.renderBarChart() }
           />
         </ContainerLayout>
-        <Checkbox 
-          id="toggle_checked" 
-          type="toggle" 
+        <Checkbox
+          id="toggle_checked"
+          type="toggle"
           label="Toggle Sequential Colors"
           checked={ this.state.sequentialColors }
           onChange={ this.handleCheckboxToggle }
@@ -1607,7 +1607,7 @@ class Example extends React.Component {
                 supplementaryInfo="Supplementary info"
               />
             }
-            bodyContent={ 
+            bodyContent={
               <FlexLayout flexGrow="1" alignItems="center" and justifyContent="center" style={{ margin: '20px 20px 0 20px'}}>
                 <DashboardChart color={ ThemeManager.getVar('blue-1') } fadeColor='rgba(34, 165, 247, .5)' />
               </FlexLayout>
@@ -1623,7 +1623,7 @@ class Example extends React.Component {
                 defaultSelectProps={ defaultSelectProps }
               />
             }
-            bodyContent={ 
+            bodyContent={
               <FlexLayout flexGrow="1" alignItems="center" and justifyContent="center" style={{ margin: '20px 20px 0 20px'}}>
                 <DashboardChart color='#8a77ed' fadeColor='rgba(138, 119, 237, .6)' />
               </FlexLayout>
@@ -1639,7 +1639,7 @@ class Example extends React.Component {
                 paginationProps={ paginationProps }
               />
             }
-            bodyContent={ 
+            bodyContent={
               <FlexLayout flexGrow="1" alignItems="center" and justifyContent="center" style={{ margin: '20px 20px 0 20px'}}>
                 <DashboardChart color='#36d068' fadeColor='rgba(54, 208, 104, .5)' />
               </FlexLayout>
@@ -1655,7 +1655,7 @@ class Example extends React.Component {
                 showCloseIcon={ false }
               />
             }
-            bodyContent={ 
+            bodyContent={
               <FlexLayout flexGrow="1" alignItems="center" and justifyContent="center" style={{ margin: '20px 20px 0 20px'}}>
                 <DashboardChart color='#ffbc0b' fadeColor='rgba(255, 188, 11, .5)' />
               </FlexLayout>
@@ -1833,21 +1833,21 @@ class Example extends React.Component {
   renderLegend() {
     return (
       <FlexLayout justifyContent="center" flexGrow="1">
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat1 }
           color={ ThemeManager.getVar('green-1') }
           id="cat1"
           label="cat1"
           onChange={ (e) => { this.handleCheckboxOnChange(e, 'cat1') } }
         />
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat2 }
           color={ ThemeManager.getVar('yellow-1') }
           id="cat2"
           label="cat2"
           onChange={ (e) => { this.handleCheckboxOnChange(e, 'cat2') } }
         />
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat3 }
           color={ ThemeManager.getVar('red-1') }
           id="cat3"
@@ -1859,7 +1859,7 @@ class Example extends React.Component {
   }
 
   renderTooltipCats(payloads) {
-    return payloads.map(payload => { 
+    return payloads.map(payload => {
 
       let color;
       switch(payload.fill) {
@@ -1962,8 +1962,8 @@ class Example extends React.Component {
     return (
       <StackingLayout style={{width: '100%', padding: '20px 20px 0 20px'}}>
         <ResponsiveContainer width="100%" height={200}>
-          <BarChart 
-            data={data} 
+          <BarChart
+            data={data}
               onMouseMove={
                 (e) => {
                   this.setState((prevState) => {
@@ -2189,21 +2189,21 @@ class Example extends React.Component {
   renderLegend() {
     return (
       <FlexLayout justifyContent="center" flexGrow="1">
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat1 }
           color={ ThemeManager.getVar('green-1') }
           id="cat11"
           label="cat1"
           onChange={ (e) => { this.handleCheckboxOnChange(e, 'cat1') } }
         />
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat2 }
           color={ ThemeManager.getVar('yellow-1') }
           id="cat22"
           label="cat2"
           onChange={ (e) => { this.handleCheckboxOnChange(e, 'cat2') } }
         />
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat3 }
           color={ ThemeManager.getVar('red-1') }
           id="cat33"
@@ -2215,7 +2215,7 @@ class Example extends React.Component {
   }
 
   renderTooltipCats(payloads) {
-    return payloads.map(payload => { 
+    return payloads.map(payload => {
       let color;
       switch(payload.fill) {
         case '#36d068':
@@ -2317,8 +2317,8 @@ class Example extends React.Component {
     return (
       <StackingLayout style={{width: '100%', padding: '20px 20px 0 20px'}}>
         <ResponsiveContainer width="100%" height={200}>
-          <BarChart 
-            data={data} 
+          <BarChart
+            data={data}
               onMouseMove={
                 (e) => {
                   this.setState((prevState) => {
@@ -2640,7 +2640,7 @@ class Example extends React.Component {
   }
 
   getCatColor(id, type) {
-    cat = this.state.sequentialColors ? 'sequential' : 'category';   
+    cat = this.state.sequentialColors ? 'sequential' : 'category';
     return catColors[cat][id][type];
   }
 
@@ -2707,7 +2707,7 @@ class Example extends React.Component {
   }
 
   renderTooltipCats(payloads) {
-    return payloads.map(payload => { 
+    return payloads.map(payload => {
       return (
         <FlexLayout justifyContent="space-between">
           <Badge
@@ -2915,11 +2915,11 @@ class Example extends React.Component {
     const cursor = this.state.tipType === 'popover' ? 'default' : 'pointer';
     const bars = ['cat1', 'cat2', 'cat3'];
 
-    return bars.map(bar => { 
+    return bars.map(bar => {
       return (
-        <Bar 
-          stackId="a" 
-          dataKey={ bar } 
+        <Bar
+          stackId="a"
+          dataKey={ bar }
           onMouseDown={ this.handleBarMouseDown }
           onMouseUp={ this.handleBarMouseUp }
         >
@@ -3040,9 +3040,9 @@ class Example extends React.Component {
             bodyContent={ this.renderBarChart() }
           />
         </ContainerLayout>
-        <Checkbox 
-          id="toggle_checked" 
-          type="toggle" 
+        <Checkbox
+          id="toggle_checked"
+          type="toggle"
           label="Toggle Sequential Colors"
           checked={ this.state.sequentialColors }
           onChange={ this.handleCheckboxToggle }
