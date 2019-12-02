@@ -1,6 +1,9 @@
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Layer from '../../container/Layer';
 import ReBar from '../../cartesian/Bar';
 import { LEGEND_TYPES, TOOLTIP_TYPES, isSsr } from '../../util/ReactUtils';
+import { filterEventsOfChild, getPresentationAttributes } from '../../util/ReactUtils';
 
 /**
  * @component
@@ -150,6 +153,11 @@ export default class Bar extends ReBar {
      */
     shape: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
     /**
+     * Shape to use to render an error type bar. If set a ReactElement, the shape of bar can be 
+     * customized. If set a function, the function  will be called to render customized shape.
+     */
+    errorShape: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
+    /**
      * The position information of all the rectangles, usually calculated internally.
      */
     data: PropTypes.arrayOf(PropTypes.shape({
@@ -212,4 +220,37 @@ export default class Bar extends ReBar {
     onAnimationStart: () => {},
     onAnimationEnd: () => {},
   };
+
+  /**
+   * Render the rectangle bars
+   * @param {array} data - Array of data points to render to bars
+   * @returns {React.Element} of bars
+   */
+  renderRectanglesStatically(data) {
+    const { errorShape, shape } = this.props;
+    const values = _.map(data, (item) => {
+      return item && item.value;
+    });
+
+    const baseProps = getPresentationAttributes(this.props);
+    return data && data.map((entry, i) => {
+      const props = { ...baseProps, ...entry, index: i };
+
+      // If the entry has no value then use the errorShape bar representation
+      let barShape = shape;
+      if (_.isUndefined(entry.value) && errorShape) {
+        barShape = errorShape;
+      }
+
+      return (
+        <Layer
+          className="recharts-bar-rectangle"
+          {...filterEventsOfChild(this.props, entry, i)}
+          key={`rectangle-${i}`}
+        >
+          {this.constructor.renderRectangle(barShape, props)}
+        </Layer>
+      );
+    });
+  }
 }

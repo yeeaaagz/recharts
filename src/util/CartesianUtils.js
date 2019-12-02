@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { getTicksOfScale, parseScale, checkDomainOfScale, getBandSizeOfAxis } from './ChartUtils';
+import { getBarChartArea } from '../ntnx/util/ChartUtils';
 
 /**
  * Calculate the scale function, position, width, height of axes
@@ -10,8 +11,8 @@ import { getTicksOfScale, parseScale, checkDomainOfScale, getBandSizeOfAxis } fr
  * @param  {String} chartName The name of chart
  * @return {Object} Configuration
  */
-export const formatAxisMap = (props, axisMap, offset, axisType, chartName) => {
-  const { width, height, layout } = props;
+export const formatAxisMap = (props, axisMap, offset, axisType, chartName, getCenterOffset) => {
+  const { alignment, data, width, height, layout } = props;
   const ids = Object.keys(axisMap);
   const steps = {
     left: offset.left,
@@ -24,17 +25,88 @@ export const formatAxisMap = (props, axisMap, offset, axisType, chartName) => {
     bottomMirror: height - offset.bottom,
   };
 
+    const barSizeList = [10, 15, 20, 25, 30];
+    const barSize = 20;
+    const barGap = 20;
+    const toleranceRange = [10, 100];
+
+    /**
+     * Get center offset distance from start of x axis
+     * @param  {number} diagramWidth - width of diagram
+     * @param  {number} chartArea - width of chart area
+     * @param  {number} barGap - gap space between bars
+     * @param  {number} offset - offset distance from center of chart
+     * @return {number} offset distance
+     */
+    const getCenterOffsetDistance = (diagramWidth, chartArea, barGap, offset) => {
+      return getCenterOffset(diagramWidth - offset, (chartArea - barGap));
+    };
+
+    /**
+     * Get bars drawing range
+     * @param {object} props - props to define draw range
+     * @return {array} Range of where to draw start and end coordinates for bars and size of bars.
+     */
+    const getBarDrawRange = (props) => {
+      const { 
+        initialBarSize, 
+        barGap, 
+        barSizeList, 
+        diagramWidth,
+        numBars, 
+        offset, 
+        toleranceRange 
+      } = props;
+
+      let centerRangeStart, centerRangeEnd, newBarSize;
+      // Test the list of bar sizes to find which size fits the maximum bars available.
+      _.each(barSizeList, (barSize, index) => {
+        const chartArea = getBarChartArea(barSize, barGap, numBars) + barGap;
+        const offsetDistance = getCenterOffsetDistance(diagramWidth + offset, chartArea, barGap, offset);
+
+        // Offset distance is distance chart area starts from the beginning of x-axis. If offset 
+        // distance is within the minimum tolerance range then the bar size test passes. 
+        if (offsetDistance > toleranceRange[0]) {
+          // Get the first center point where to draw the bars, then push it to the right based on 
+          // the offset of the y-axis.
+          centerRangeStart = getCenterOffset(diagramWidth, chartArea) + offset;
+          // Take the starting point then width of the chart area to find the range end point.
+          centerRangeEnd = centerRangeStart + chartArea;
+          newBarSize = barSize;
+        }
+      });
+
+      // Min threshold hit. Set the bar size to the minimum allowed.
+      if (!newBarSize) {
+        const chartArea = getBarChartArea(barSizeList[0], barGap, numBars) + barGap;
+        centerRangeStart = getCenterOffset(diagramWidth, chartArea) + offset;
+        centerRangeEnd = centerRangeStart + chartArea;
+        newBarSize = barSizeList[0];
+      }
+
+      return [centerRangeStart, centerRangeEnd, newBarSize];
+    };
+
+  const barDrawRange = getBarDrawRange({
+    initialBarSize: barSize, 
+    barGap, 
+    barSizeList,
+    diagramWidth: width - offset.left,
+    numBars: axisMap[0].domain.length || data.length,
+    offset: offset.left,
+    toleranceRange
+  });
+
   return ids.reduce((result, id) => {
     const axis = axisMap[id];
     const { orientation, domain, padding = {}, mirror, reversed } = axis;
     const offsetKey = `${orientation}${mirror ? 'Mirror' : ''}`;
-
     let range, x, y, needSpace;
 
     if (axisType === 'xAxis') {
       range = [
-        offset.left + (padding.left || 0),
-        offset.left + offset.width - (padding.right || 0),
+        alignment === 'center' ? barDrawRange[0] : offset.left + (padding.left || 0),
+        alignment === 'center' ? barDrawRange[1] : offset.left + offset.width - (padding.right || 0),
       ];
     } else if (axisType === 'yAxis') {
       range = layout === 'horizontal' ? [
@@ -67,15 +139,17 @@ export const formatAxisMap = (props, axisMap, offset, axisType, chartName) => {
       y = offset.top;
     }
 
+    const axisWidth = alignment ==='center' ? width - offset.left : offset.width;
     const finalAxis = {
       ...axis,
       ...ticks,
       realScaleType, x, y, scale,
-      width: axisType === 'xAxis' ? offset.width : axis.width,
+      width: axisType === 'xAxis' ? axisWidth : axis.width,
       height: axisType === 'yAxis' ? offset.height : axis.height,
     };
 
     finalAxis.bandSize = getBandSizeOfAxis(finalAxis, ticks);
+    finalAxis.barSize = barDrawRange[2];
 
     if (!axis.hide && axisType === 'xAxis') {
       steps[offsetKey] += (needSpace ? -1 : 1) * finalAxis.height;

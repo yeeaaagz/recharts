@@ -1,3 +1,476 @@
+Centered with No Data and Missing Data Examples
+```js
+const Cell = require('../../component/Cell').default;
+const Bar = require('../cartesian/Bar').default;
+const Brush = require('../cartesian/Brush').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Tooltip = require('../component/Tooltip').default;
+
+import {
+  Button,
+  ContainerLayout,
+  InputNumber,
+  FlexLayout,
+  RestartIcon,
+  SuspendIcon,
+  Slider,
+  StackingLayout,
+  TextLabel,
+  Title,
+  ThemeManager,
+  Tooltip as RTooltip
+} from 'prism-reactjs';
+
+const data = [
+  {
+    "name": "Jan",
+    "value": 45000
+  },
+  {
+    "name": "Feb",
+    "value": 90000
+  },
+  {
+    "name": "Mar",
+    "value": 0
+  },
+  {
+    "name": "Apr",
+    "value": 70000
+  },
+  {
+    "name": "May",
+    "value": 70000
+  },
+  {
+    "name": "Jun",
+    "value": 45000
+  },
+  {
+    "name": "Jul",
+    "value": 45000
+  },
+  {
+    "name": "Aug",
+    "value": 90000
+  },
+  {
+    "name": "Sep",
+    "value": 90000
+  },
+  {
+    "name": "Oct"
+  },
+  {
+    "name": "Nov",
+    "value": 70000
+  },
+  {
+    "name": "Dec",
+    "value": 45000
+  },
+  {
+    "name": "Jan",
+    "value": 45000
+  },
+  {
+    "name": "Feb",
+    "value": 90000
+  },
+  {
+    "name": "Mar",
+    "value": 90000
+  },
+  {
+    "name": "Apr",
+    "value": 70000
+  },
+  {
+    "name": "May",
+    "value": 70000
+  },
+  {
+    "name": "Jun",
+    "value": 45000
+  },
+  {
+    "name": "Jul",
+    "value": 45000
+  },
+  {
+    "name": "Aug",
+    "value": 90000
+  },
+  {
+    "name": "Sep",
+    "value": 90000
+  },
+  {
+    "name": "Oct",
+    "value": 70000
+  },
+  {
+    "name": "Nov",
+    "value": 70000
+  },
+  {
+    "name": "Dec",
+    "value": 45000
+  },
+  {
+    "name": "Jan",
+    "value": 45000
+  },
+  {
+    "name": "Feb",
+    "value": 90000
+  },
+  {
+    "name": "Mar",
+    "value": 90000
+  },
+  {
+    "name": "Apr",
+    "value": 70000
+  },
+  {
+    "name": "May",
+    "value": 70000
+  },
+  {
+    "name": "Jun",
+    "value": 45000
+  },
+  {
+    "name": "Jul",
+    "value": 45000
+  },
+  {
+    "name": "Aug",
+    "value": 90000
+  },
+  {
+    "name": "Sep",
+    "value": 90000
+  },
+  {
+    "name": "Oct",
+    "value": 70000
+  },
+  {
+    "name": "Nov",
+    "value": 70000
+  },
+  {
+    "name": "Dec",
+    "value": 45000
+  }
+];
+
+class Example extends React.Component {
+  constructor(props) {
+    const startValue = 12;
+
+    this.state = {
+      autoPlay: false,
+      autoPlayIntervalSpeed: 1000,
+      data: data.slice(0, startValue),
+      sliderVal: startValue
+    };
+
+    this.onChangeSlider = this.onChangeSlider.bind(this);
+    this.onChangeAutoPlay = this.onChangeAutoPlay.bind(this);
+    this.startTimeOut = this.startTimeOut.bind(this);
+    this.handleOnInputNumberChange = this.handleOnInputNumberChange.bind(this);
+  }
+
+  startTimeOut() {
+    setTimeout(() => {
+      if (!this.state.autoPlay) {
+        return;
+      }
+      this.setState((prevState) => {
+        const newSlideVal = prevState.sliderVal >= data.length ? 1 : prevState.sliderVal + 1;
+
+        return {
+          data: data.slice(0, newSlideVal),
+          sliderVal: newSlideVal
+        };
+      });
+      this.startTimeOut();
+    },
+    this.state.autoPlayIntervalSpeed
+    );
+  }
+
+  handleOnInputNumberChange(value) {
+    this.setState({
+      autoPlayIntervalSpeed: value
+    });
+  }
+
+  onChangeSlider(value) {
+    this.setState({
+      data: data.slice(0, value),
+      sliderVal: value
+    });
+  }
+
+  onChangeAutoPlay(value) {
+    this.setState((prevState) => {
+      if (!prevState.autoPlay) {
+        this.startTimeOut();
+      }
+
+      return {
+        autoPlay: !prevState.autoPlay
+      };
+    });
+  }
+
+  renderAutoPlayBtn() {
+    if (this.state.autoPlay) {
+      return (
+        <RTooltip content="Stop Auto Play Loop">
+          <Button  onClick={ this.onChangeAutoPlay }type="destructive"><SuspendIcon /></Button>
+        </RTooltip>
+      );
+    }
+
+    return (
+      <RTooltip content="Auto Play Loop">
+        <Button onClick={ this.onChangeAutoPlay }><RestartIcon /></Button>
+      </RTooltip>
+    );
+  }
+
+  renderNoData() {
+    return (
+      <ContainerLayout style={{width: '730px', height: '250px'}} backgroundColor="white" border={ true }>
+        <FlexLayout style={{height: '100%'}} justifyContent="center" alignItems="center">
+          <TextLabel style={{fontSize: '40px'}}>
+            No Data
+          </TextLabel>
+        </FlexLayout>
+      </ContainerLayout>
+    );
+  }
+
+  renderBarChart() {
+    const CandyBar = (props) => {
+      const {
+        x: oX,
+        y: oY,
+        width: oWidth,
+        height: oHeight,
+        value,
+        fill
+      } = props;
+
+      let x = oX;
+      let y = oHeight < 0 ? oY + oHeight : oY;
+      let width = oWidth;
+      let height = Math.abs(oHeight);
+
+      return (
+        <rect
+          fill={ ThemeManager.getVar('light-gray-1') }
+          mask='url(#mask-stripe)'
+          x={x}
+          y={ !value ? props.background.y : y}
+          width={width}
+          height={ !value ? props.background.height : height} />
+        );
+    };
+
+    return (
+      <BarChart
+        alignment="center"
+        width={730}
+        height={250}
+        data={ this.state.data}
+      >
+        <Tooltip content={ <div /> } />
+        <pattern id="pattern-stripe" width="6" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+          <rect width="2" height="8" transform="translate(0,0)" fill="white" />
+        </pattern>
+        <mask id="mask-stripe">
+          <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-stripe)" />
+        </mask>
+        <XAxis dataKey="name"  tickLine={false} minTickGap={ 2 } />
+        <YAxis
+          tickFormatter={(value) => {
+            if (value === 0) {
+              return value;
+            }
+
+            return `${value / 1000}k`;
+          }}
+          tickLine={false}
+          axisLine={false} />
+        <Bar errorShape={ CandyBar } dataKey="value">
+          {
+            data.map((entry, index) => {
+              return (
+              <Cell key={`cell-${index}`} fill={ ThemeManager.getVar('blue-1') } />
+            )})
+          }
+        </Bar>
+        <Brush hideText={ true } dataKey="name" travellerWidth={ 0 } />
+      </BarChart>
+    );
+  }
+
+  render() {
+    const InputLabelSuffix = (
+      <FlexLayout alignItems="center" itemSpacing="10px">
+        <TextLabel style={ {
+          borderLeft: '1px solid #b8bfca',
+          padding: '5px 0px 5px 10px'
+        } }>
+          ms
+        </TextLabel>
+      </FlexLayout>
+    );
+
+    return (
+      <StackingLayout>
+        { this.state.sliderVal === 0 ? this.renderNoData() : this.renderBarChart() }
+        <Title size="h3">Data points</Title>
+        <Slider
+          min={ 0 }
+          max={ data.length }
+          value={ this.state.sliderVal }
+          onChange={ this.onChangeSlider }
+          step={ 1 }
+        />
+        <StackingLayout itemSpacing="0px">
+          <TextLabel size={ TextLabel.TEXT_LABEL_SIZE.SMALL } type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>
+          Autoplay and Interval Speed
+          </TextLabel>
+          <FlexLayout alignItems="center">
+            { this.renderAutoPlayBtn() }
+            <InputNumber
+              style={ { width: 80 } }
+              step={ 1 }
+              onValueChange={ this.handleOnInputNumberChange }
+              value={ this.state.autoPlayIntervalSpeed }
+              suffix={ InputLabelSuffix }
+          />
+          </FlexLayout>
+          </StackingLayout>
+      </StackingLayout>
+    );
+  }
+}
+
+<Example />
+```
+
+Horizontal
+```js
+const CartesianGrid = require('../cartesian/CartesianGrid').default;
+const isNull = require('lodash').isNull;
+const Bar = require('../cartesian/Bar').default;
+const XAxis = require('../../cartesian/XAxis').default;
+const YAxis = require('../../cartesian/YAxis').default;
+const Legend = require('../../component/Legend').default;
+const ThemeManager = require('prism-reactjs').ThemeManager;
+
+const data = [
+  {
+    "name": "March",
+    "marValue": 45000
+  },
+  {
+    "name": "April",
+    "aprValue": 90000
+  },
+  {
+    "name": "May",
+    "mayValue": 90000
+  },
+  {
+    "name": "June",
+    "junValue": 70000
+  },
+  {
+    "name": "July",
+    "julValue": 70000
+  },
+  {
+    "name": "August",
+    "augValue": 45000
+  }
+];
+
+class Example extends React.Component {
+
+  getBarFillColor(bar) {
+    switch(bar) {
+      case 'marValue':
+        return ThemeManager.getVar('linear-6-1-color');
+      case 'aprValue':
+        return ThemeManager.getVar('linear-6-2-color');
+      case 'mayValue':
+        return ThemeManager.getVar('linear-6-3-color');
+      case 'junValue':
+        return ThemeManager.getVar('linear-6-4-color');
+      case 'julValue':
+        return ThemeManager.getVar('linear-6-5-color');
+      case 'augValue':
+        return ThemeManager.getVar('linear-6-6-color');
+    }
+  }
+
+  renderBars() {
+    const bars = ['marValue', 'aprValue', 'mayValue', 'junValue', 'julValue', 'augValue'];
+
+    return bars.map(bar => {
+      return (
+        <Bar
+          stackId="a"
+          dataKey={ bar }
+          fill={ this.getBarFillColor(bar) }
+        />
+      );
+    });
+  }
+
+  render() {
+    return (
+      <BarChart layout="vertical"
+        width={730}
+        height={250}
+        data={data}
+      >
+          <XAxis
+            type="number"
+            tickFormatter={(value) => {
+              if (value === 0) {
+                return value;
+              }
+
+              return `${value / 1000}k`;
+            }}
+            tickLine={false}
+          />
+          <YAxis
+            dataKey="name"
+            type="category"
+            axisLine={ false }
+            tickLine={false}
+          />
+        { this.renderBars() }
+      </BarChart>
+    );
+  }
+}
+
+<Example />
+```
+
 Brushing
 ```js
 const CartesianGrid = require('../cartesian/CartesianGrid').default;
@@ -297,7 +770,7 @@ class Example extends React.Component {
   }
 
   getCatColor(id, type) {
-    cat = this.state.sequentialColors ? 'sequential' : 'category';   
+    cat = this.state.sequentialColors ? 'sequential' : 'category';
     return catColors[cat][id][type];
   }
 
@@ -364,7 +837,7 @@ class Example extends React.Component {
   }
 
   renderTooltipCats(payloads) {
-    return payloads.map(payload => { 
+    return payloads.map(payload => {
       return (
         <FlexLayout justifyContent="space-between">
           <Badge
@@ -572,11 +1045,11 @@ class Example extends React.Component {
     const cursor = this.state.tipType === 'popover' ? 'default' : 'pointer';
     const bars = ['cat1', 'cat2', 'cat3'];
 
-    return bars.map(bar => { 
+    return bars.map(bar => {
       return (
-        <Bar 
-          stackId="a" 
-          dataKey={ bar } 
+        <Bar
+          stackId="a"
+          dataKey={ bar }
           onMouseDown={ this.handleBarMouseDown }
           onMouseUp={ this.handleBarMouseUp }
           isAnimationActive={ false }
@@ -705,9 +1178,9 @@ class Example extends React.Component {
             bodyContent={ this.renderBarChart() }
           />
         </ContainerLayout>
-        <Checkbox 
-          id="toggle_checked" 
-          type="toggle" 
+        <Checkbox
+          id="toggle_checked"
+          type="toggle"
           label="Toggle Sequential Colors"
           checked={ this.state.sequentialColors }
           onChange={ this.handleCheckboxToggle }
@@ -1134,7 +1607,7 @@ class Example extends React.Component {
                 supplementaryInfo="Supplementary info"
               />
             }
-            bodyContent={ 
+            bodyContent={
               <FlexLayout flexGrow="1" alignItems="center" and justifyContent="center" style={{ margin: '20px 20px 0 20px'}}>
                 <DashboardChart color={ ThemeManager.getVar('blue-1') } fadeColor='rgba(34, 165, 247, .5)' />
               </FlexLayout>
@@ -1150,7 +1623,7 @@ class Example extends React.Component {
                 defaultSelectProps={ defaultSelectProps }
               />
             }
-            bodyContent={ 
+            bodyContent={
               <FlexLayout flexGrow="1" alignItems="center" and justifyContent="center" style={{ margin: '20px 20px 0 20px'}}>
                 <DashboardChart color='#8a77ed' fadeColor='rgba(138, 119, 237, .6)' />
               </FlexLayout>
@@ -1166,7 +1639,7 @@ class Example extends React.Component {
                 paginationProps={ paginationProps }
               />
             }
-            bodyContent={ 
+            bodyContent={
               <FlexLayout flexGrow="1" alignItems="center" and justifyContent="center" style={{ margin: '20px 20px 0 20px'}}>
                 <DashboardChart color='#36d068' fadeColor='rgba(54, 208, 104, .5)' />
               </FlexLayout>
@@ -1182,7 +1655,7 @@ class Example extends React.Component {
                 showCloseIcon={ false }
               />
             }
-            bodyContent={ 
+            bodyContent={
               <FlexLayout flexGrow="1" alignItems="center" and justifyContent="center" style={{ margin: '20px 20px 0 20px'}}>
                 <DashboardChart color='#ffbc0b' fadeColor='rgba(255, 188, 11, .5)' />
               </FlexLayout>
@@ -1360,21 +1833,21 @@ class Example extends React.Component {
   renderLegend() {
     return (
       <FlexLayout justifyContent="center" flexGrow="1">
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat1 }
           color={ ThemeManager.getVar('green-1') }
           id="cat1"
           label="cat1"
           onChange={ (e) => { this.handleCheckboxOnChange(e, 'cat1') } }
         />
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat2 }
           color={ ThemeManager.getVar('yellow-1') }
           id="cat2"
           label="cat2"
           onChange={ (e) => { this.handleCheckboxOnChange(e, 'cat2') } }
         />
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat3 }
           color={ ThemeManager.getVar('red-1') }
           id="cat3"
@@ -1386,7 +1859,7 @@ class Example extends React.Component {
   }
 
   renderTooltipCats(payloads) {
-    return payloads.map(payload => { 
+    return payloads.map(payload => {
 
       let color;
       switch(payload.fill) {
@@ -1489,8 +1962,8 @@ class Example extends React.Component {
     return (
       <StackingLayout style={{width: '100%', padding: '20px 20px 0 20px'}}>
         <ResponsiveContainer width="100%" height={200}>
-          <BarChart 
-            data={data} 
+          <BarChart
+            data={data}
               onMouseMove={
                 (e) => {
                   this.setState((prevState) => {
@@ -1716,21 +2189,21 @@ class Example extends React.Component {
   renderLegend() {
     return (
       <FlexLayout justifyContent="center" flexGrow="1">
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat1 }
           color={ ThemeManager.getVar('green-1') }
           id="cat11"
           label="cat1"
           onChange={ (e) => { this.handleCheckboxOnChange(e, 'cat1') } }
         />
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat2 }
           color={ ThemeManager.getVar('yellow-1') }
           id="cat22"
           label="cat2"
           onChange={ (e) => { this.handleCheckboxOnChange(e, 'cat2') } }
         />
-        <Checkbox 
+        <Checkbox
           checked={ this.state.showCat3 }
           color={ ThemeManager.getVar('red-1') }
           id="cat33"
@@ -1742,7 +2215,7 @@ class Example extends React.Component {
   }
 
   renderTooltipCats(payloads) {
-    return payloads.map(payload => { 
+    return payloads.map(payload => {
       let color;
       switch(payload.fill) {
         case '#36d068':
@@ -1844,8 +2317,8 @@ class Example extends React.Component {
     return (
       <StackingLayout style={{width: '100%', padding: '20px 20px 0 20px'}}>
         <ResponsiveContainer width="100%" height={200}>
-          <BarChart 
-            data={data} 
+          <BarChart
+            data={data}
               onMouseMove={
                 (e) => {
                   this.setState((prevState) => {
@@ -2167,7 +2640,7 @@ class Example extends React.Component {
   }
 
   getCatColor(id, type) {
-    cat = this.state.sequentialColors ? 'sequential' : 'category';   
+    cat = this.state.sequentialColors ? 'sequential' : 'category';
     return catColors[cat][id][type];
   }
 
@@ -2234,7 +2707,7 @@ class Example extends React.Component {
   }
 
   renderTooltipCats(payloads) {
-    return payloads.map(payload => { 
+    return payloads.map(payload => {
       return (
         <FlexLayout justifyContent="space-between">
           <Badge
@@ -2442,11 +2915,11 @@ class Example extends React.Component {
     const cursor = this.state.tipType === 'popover' ? 'default' : 'pointer';
     const bars = ['cat1', 'cat2', 'cat3'];
 
-    return bars.map(bar => { 
+    return bars.map(bar => {
       return (
-        <Bar 
-          stackId="a" 
-          dataKey={ bar } 
+        <Bar
+          stackId="a"
+          dataKey={ bar }
           onMouseDown={ this.handleBarMouseDown }
           onMouseUp={ this.handleBarMouseUp }
         >
@@ -2567,9 +3040,9 @@ class Example extends React.Component {
             bodyContent={ this.renderBarChart() }
           />
         </ContainerLayout>
-        <Checkbox 
-          id="toggle_checked" 
-          type="toggle" 
+        <Checkbox
+          id="toggle_checked"
+          type="toggle"
           label="Toggle Sequential Colors"
           checked={ this.state.sequentialColors }
           onChange={ this.handleCheckboxToggle }

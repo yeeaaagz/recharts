@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { scalePoint } from 'd3-scale';
 import { ThemeManager } from 'prism-reactjs';
 import ReBrush from '../../cartesian/Brush';
 import Layer from '../../container/Layer';
@@ -102,6 +103,35 @@ export default class Brush extends ReBrush {
     padding: { top: 1, right: 1, bottom: 1, left: 1 },
     leaveTimeOut: 1000,
   };
+
+  /**
+   * Updates brush scale points on chart area. The scale points are used to determine where to plot 
+   * index positions for each data segment.
+   * @param {object} props - brush props
+   * @param {number} endX - x coordinate to end render slider
+   * @returns {object}
+   */
+  updateScale(props) {
+    const { alignment, data, startIndex, endIndex, x, width, toleranceRange, travellerWidth } = props;
+    const len = data.length;
+
+    let rangePadding = 0;
+    if (alignment === 'center') {
+      rangePadding = toleranceRange[0];
+    }
+
+    this.scale = scalePoint()
+      .domain(_.range(0, len))
+      .range([x, x + width - travellerWidth - rangePadding]);
+    this.scaleValues = this.scale.domain().map(entry => this.scale(entry));
+    return {
+      isTextActive: false,
+      isSlideMoving: false,
+      isTravellerMoving: false,
+      startX: this.scale(startIndex),
+      endX: this.scale(endIndex),
+    };
+  }
 
   /**
    * Render Slider Bar
